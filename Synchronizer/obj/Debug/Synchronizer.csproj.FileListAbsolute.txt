@@ -1,0 +1,9 @@
+D:\Projects\Synchronizer\Synchronizer\bin\Debug\Synchronizer.exe.config
+D:\Projects\Synchronizer\Synchronizer\bin\Debug\Synchronizer.exe
+D:\Projects\Synchronizer\Synchronizer\bin\Debug\Synchronizer.pdb
+D:\Projects\Synchronizer\Synchronizer\obj\Debug\Synchronizer.csprojResolveAssemblyReference.cache
+D:\Projects\Synchronizer\Synchronizer\obj\Debug\Synchronizer.Properties.Resources.resources
+D:\Projects\Synchronizer\Synchronizer\obj\Debug\Synchronizer.csproj.GenerateResource.Cache
+D:\Projects\Synchronizer\Synchronizer\obj\Debug\Synchronizer.exe
+D:\Projects\Synchronizer\Synchronizer\obj\Debug\Synchronizer.pdb
+D:\Projects\Synchronizer\Synchronizer\obj\Debug\Synchronizer.SyncView.resources
