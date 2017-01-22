@@ -11,6 +11,11 @@ namespace Synchronizer
     {
         void AttachView(ISynchView syncView);
 
+        void AttachModel(ISyncModel syncModel);
+
+
+        // on view events methods
+
         void DetachView(ISynchView syncView);
 
         void InitSyncView(ISynchView syncView);
@@ -34,5 +39,16 @@ namespace Synchronizer
         void SourcePathSelected(ISynchView syncView);
 
         void TargetPathSelected(ISynchView syncView);
+
+        void FileTypeSelected(ISynchView syncView);
+
+        // on model events methods
+
+        void FoldersSynchronized(ISyncModel syncModel);
+
+        void FoldersCompared(ISyncModel syncModel);
+
+        void FoldersFiltered(ISyncModel syncModel);
+
     }
 }

@@ -31,7 +31,7 @@ namespace Synchronizer
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem("");
+            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("");
             this.sourceListView = new System.Windows.Forms.ListView();
             this.fileName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.fileType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -39,6 +39,9 @@ namespace Synchronizer
             this.lastChange = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.sourceImageList = new System.Windows.Forms.ImageList(this.components);
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.flowLayoutPanel4 = new System.Windows.Forms.FlowLayoutPanel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.srcFilesCountLabel = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.fileTypeComboBox = new System.Windows.Forms.ComboBox();
             this.source = new System.Windows.Forms.Label();
@@ -49,6 +52,10 @@ namespace Synchronizer
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.targetImageList = new System.Windows.Forms.ImageList(this.components);
+            this.flowLayoutPanel3 = new System.Windows.Forms.FlowLayoutPanel();
+            this.label2 = new System.Windows.Forms.Label();
+            this.trgtCountAmountLabel = new System.Windows.Forms.Label();
             this.panel3 = new System.Windows.Forms.Panel();
             this.Targetlabel = new System.Windows.Forms.Label();
             this.targetBrouseButton = new System.Windows.Forms.Button();
@@ -74,11 +81,15 @@ namespace Synchronizer
             this.subfoldersCheckBox = new System.Windows.Forms.CheckBox();
             this.compareButton = new System.Windows.Forms.Button();
             this.synchButton = new System.Windows.Forms.Button();
+            this.infoLable = new System.Windows.Forms.Label();
+            this.changeFoldersButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            this.flowLayoutPanel4.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.flowLayoutPanel3.SuspendLayout();
             this.panel3.SuspendLayout();
             this.panel1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
@@ -96,9 +107,9 @@ namespace Synchronizer
             this.fileType,
             this.fileVersion,
             this.lastChange});
-            this.sourceListView.Location = new System.Drawing.Point(0, 30);
+            this.sourceListView.Location = new System.Drawing.Point(6, 30);
             this.sourceListView.Name = "sourceListView";
-            this.sourceListView.Size = new System.Drawing.Size(586, 435);
+            this.sourceListView.Size = new System.Drawing.Size(567, 355);
             this.sourceListView.SmallImageList = this.sourceImageList;
             this.sourceListView.TabIndex = 2;
             this.sourceListView.UseCompatibleStateImageBehavior = false;
@@ -143,6 +154,7 @@ namespace Synchronizer
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.splitContainer1.Panel1.Controls.Add(this.flowLayoutPanel4);
             this.splitContainer1.Panel1.Controls.Add(this.panel2);
             this.splitContainer1.Panel1.Controls.Add(this.sourceListView);
             this.splitContainer1.Panel1.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -151,12 +163,47 @@ namespace Synchronizer
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.BackColor = System.Drawing.SystemColors.ControlLight;
+            this.splitContainer1.Panel2.Controls.Add(this.changeFoldersButton);
             this.splitContainer1.Panel2.Controls.Add(this.TargetlistView);
+            this.splitContainer1.Panel2.Controls.Add(this.flowLayoutPanel3);
             this.splitContainer1.Panel2.Controls.Add(this.panel3);
             this.splitContainer1.Panel2.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.splitContainer1.Size = new System.Drawing.Size(1169, 468);
-            this.splitContainer1.SplitterDistance = 583;
+            this.splitContainer1.Size = new System.Drawing.Size(1152, 411);
+            this.splitContainer1.SplitterDistance = 576;
             this.splitContainer1.TabIndex = 4;
+            // 
+            // flowLayoutPanel4
+            // 
+            this.flowLayoutPanel4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.flowLayoutPanel4.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.flowLayoutPanel4.Controls.Add(this.label1);
+            this.flowLayoutPanel4.Controls.Add(this.srcFilesCountLabel);
+            this.flowLayoutPanel4.Location = new System.Drawing.Point(3, 388);
+            this.flowLayoutPanel4.Name = "flowLayoutPanel4";
+            this.flowLayoutPanel4.Size = new System.Drawing.Size(572, 20);
+            this.flowLayoutPanel4.TabIndex = 7;
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.ForeColor = System.Drawing.Color.Black;
+            this.label1.Location = new System.Drawing.Point(3, 3);
+            this.label1.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(34, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Files: ";
+            // 
+            // srcFilesCountLabel
+            // 
+            this.srcFilesCountLabel.AutoSize = true;
+            this.srcFilesCountLabel.ForeColor = System.Drawing.Color.Black;
+            this.srcFilesCountLabel.Location = new System.Drawing.Point(43, 3);
+            this.srcFilesCountLabel.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
+            this.srcFilesCountLabel.Name = "srcFilesCountLabel";
+            this.srcFilesCountLabel.Size = new System.Drawing.Size(13, 13);
+            this.srcFilesCountLabel.TabIndex = 0;
+            this.srcFilesCountLabel.Text = "0";
             // 
             // panel2
             // 
@@ -168,14 +215,14 @@ namespace Synchronizer
             this.panel2.Controls.Add(this.sourcePathTextBox);
             this.panel2.Location = new System.Drawing.Point(0, 2);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(595, 28);
+            this.panel2.Size = new System.Drawing.Size(588, 28);
             this.panel2.TabIndex = 3;
             // 
             // fileTypeComboBox
             // 
             this.fileTypeComboBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.fileTypeComboBox.FormattingEnabled = true;
-            this.fileTypeComboBox.Location = new System.Drawing.Point(531, 2);
+            this.fileTypeComboBox.Location = new System.Drawing.Point(524, 2);
             this.fileTypeComboBox.Name = "fileTypeComboBox";
             this.fileTypeComboBox.Size = new System.Drawing.Size(50, 21);
             this.fileTypeComboBox.TabIndex = 5;
@@ -195,7 +242,7 @@ namespace Synchronizer
             // sourceBrouseButton
             // 
             this.sourceBrouseButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.sourceBrouseButton.Location = new System.Drawing.Point(496, 1);
+            this.sourceBrouseButton.Location = new System.Drawing.Point(489, 1);
             this.sourceBrouseButton.Name = "sourceBrouseButton";
             this.sourceBrouseButton.Size = new System.Drawing.Size(32, 22);
             this.sourceBrouseButton.TabIndex = 1;
@@ -210,7 +257,7 @@ namespace Synchronizer
             this.sourcePathTextBox.Location = new System.Drawing.Point(53, 2);
             this.sourcePathTextBox.Name = "sourcePathTextBox";
             this.sourcePathTextBox.ReadOnly = true;
-            this.sourcePathTextBox.Size = new System.Drawing.Size(437, 20);
+            this.sourcePathTextBox.Size = new System.Drawing.Size(430, 20);
             this.sourcePathTextBox.TabIndex = 4;
             // 
             // TargetlistView
@@ -224,10 +271,11 @@ namespace Synchronizer
             this.columnHeader3,
             this.columnHeader4});
             this.TargetlistView.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem3});
-            this.TargetlistView.Location = new System.Drawing.Point(-1, 30);
+            listViewItem2});
+            this.TargetlistView.Location = new System.Drawing.Point(3, 30);
             this.TargetlistView.Name = "TargetlistView";
-            this.TargetlistView.Size = new System.Drawing.Size(586, 439);
+            this.TargetlistView.Size = new System.Drawing.Size(565, 355);
+            this.TargetlistView.SmallImageList = this.targetImageList;
             this.TargetlistView.TabIndex = 6;
             this.TargetlistView.UseCompatibleStateImageBehavior = false;
             this.TargetlistView.View = System.Windows.Forms.View.Details;
@@ -252,6 +300,45 @@ namespace Synchronizer
             this.columnHeader4.Text = "Last Change";
             this.columnHeader4.Width = 79;
             // 
+            // targetImageList
+            // 
+            this.targetImageList.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
+            this.targetImageList.ImageSize = new System.Drawing.Size(16, 16);
+            this.targetImageList.TransparentColor = System.Drawing.Color.Transparent;
+            // 
+            // flowLayoutPanel3
+            // 
+            this.flowLayoutPanel3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.flowLayoutPanel3.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
+            this.flowLayoutPanel3.Controls.Add(this.label2);
+            this.flowLayoutPanel3.Controls.Add(this.trgtCountAmountLabel);
+            this.flowLayoutPanel3.Location = new System.Drawing.Point(6, 388);
+            this.flowLayoutPanel3.Name = "flowLayoutPanel3";
+            this.flowLayoutPanel3.Size = new System.Drawing.Size(570, 20);
+            this.flowLayoutPanel3.TabIndex = 8;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.ForeColor = System.Drawing.Color.Black;
+            this.label2.Location = new System.Drawing.Point(3, 3);
+            this.label2.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(34, 13);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "Files: ";
+            // 
+            // trgtCountAmountLabel
+            // 
+            this.trgtCountAmountLabel.AutoSize = true;
+            this.trgtCountAmountLabel.ForeColor = System.Drawing.Color.Black;
+            this.trgtCountAmountLabel.Location = new System.Drawing.Point(43, 3);
+            this.trgtCountAmountLabel.Margin = new System.Windows.Forms.Padding(3, 3, 3, 0);
+            this.trgtCountAmountLabel.Name = "trgtCountAmountLabel";
+            this.trgtCountAmountLabel.Size = new System.Drawing.Size(13, 13);
+            this.trgtCountAmountLabel.TabIndex = 0;
+            this.trgtCountAmountLabel.Text = "0";
+            // 
             // panel3
             // 
             this.panel3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -259,9 +346,9 @@ namespace Synchronizer
             this.panel3.Controls.Add(this.Targetlabel);
             this.panel3.Controls.Add(this.targetBrouseButton);
             this.panel3.Controls.Add(this.targetPathTextBox);
-            this.panel3.Location = new System.Drawing.Point(0, 2);
+            this.panel3.Location = new System.Drawing.Point(46, 2);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(574, 28);
+            this.panel3.Size = new System.Drawing.Size(518, 28);
             this.panel3.TabIndex = 5;
             // 
             // Targetlabel
@@ -276,7 +363,7 @@ namespace Synchronizer
             // targetBrouseButton
             // 
             this.targetBrouseButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.targetBrouseButton.Location = new System.Drawing.Point(538, 1);
+            this.targetBrouseButton.Location = new System.Drawing.Point(482, 1);
             this.targetBrouseButton.Name = "targetBrouseButton";
             this.targetBrouseButton.Size = new System.Drawing.Size(32, 21);
             this.targetBrouseButton.TabIndex = 1;
@@ -291,7 +378,7 @@ namespace Synchronizer
             this.targetPathTextBox.Location = new System.Drawing.Point(50, 2);
             this.targetPathTextBox.Name = "targetPathTextBox";
             this.targetPathTextBox.ReadOnly = true;
-            this.targetPathTextBox.Size = new System.Drawing.Size(486, 20);
+            this.targetPathTextBox.Size = new System.Drawing.Size(430, 20);
             this.targetPathTextBox.TabIndex = 4;
             // 
             // panel1
@@ -303,7 +390,7 @@ namespace Synchronizer
             this.panel1.Controls.Add(this.menuStrip1);
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1166, 24);
+            this.panel1.Size = new System.Drawing.Size(1149, 24);
             this.panel1.TabIndex = 5;
             // 
             // flowLayoutPanel1
@@ -312,7 +399,7 @@ namespace Synchronizer
             this.flowLayoutPanel1.BackColor = System.Drawing.SystemColors.ControlLight;
             this.flowLayoutPanel1.Controls.Add(this.autosyncLabel);
             this.flowLayoutPanel1.Controls.Add(this.autosyncStateLabel);
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(1073, 0);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(1056, 0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(93, 24);
             this.flowLayoutPanel1.TabIndex = 6;
@@ -346,7 +433,7 @@ namespace Synchronizer
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1166, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1149, 24);
             this.menuStrip1.TabIndex = 7;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -427,10 +514,11 @@ namespace Synchronizer
             this.flowLayoutPanel2.Controls.Add(this.addMissedCheckBox);
             this.flowLayoutPanel2.Controls.Add(this.subfoldersCheckBox);
             this.flowLayoutPanel2.Controls.Add(this.compareButton);
+            this.flowLayoutPanel2.Controls.Add(this.infoLable);
             this.flowLayoutPanel2.Controls.Add(this.synchButton);
             this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 25);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
-            this.flowLayoutPanel2.Size = new System.Drawing.Size(1166, 26);
+            this.flowLayoutPanel2.Size = new System.Drawing.Size(1149, 26);
             this.flowLayoutPanel2.TabIndex = 6;
             // 
             // fileVersionCheckBox
@@ -492,7 +580,7 @@ namespace Synchronizer
             // synchButton
             // 
             this.synchButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.synchButton.Location = new System.Drawing.Point(507, 0);
+            this.synchButton.Location = new System.Drawing.Point(513, 0);
             this.synchButton.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
             this.synchButton.Name = "synchButton";
             this.synchButton.Size = new System.Drawing.Size(89, 26);
@@ -501,12 +589,33 @@ namespace Synchronizer
             this.synchButton.UseVisualStyleBackColor = true;
             this.synchButton.Click += new System.EventHandler(this.synchButton_Click);
             // 
+            // infoLable
+            // 
+            this.infoLable.AutoSize = true;
+            this.infoLable.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.infoLable.ForeColor = System.Drawing.Color.Red;
+            this.infoLable.Location = new System.Drawing.Point(507, 6);
+            this.infoLable.Margin = new System.Windows.Forms.Padding(3, 6, 3, 0);
+            this.infoLable.Name = "infoLable";
+            this.infoLable.Size = new System.Drawing.Size(0, 13);
+            this.infoLable.TabIndex = 6;
+            // 
+            // changeFoldersButton
+            // 
+            this.changeFoldersButton.Location = new System.Drawing.Point(6, 3);
+            this.changeFoldersButton.Name = "changeFoldersButton";
+            this.changeFoldersButton.Size = new System.Drawing.Size(37, 22);
+            this.changeFoldersButton.TabIndex = 9;
+            this.changeFoldersButton.Text = "<=>";
+            this.changeFoldersButton.UseVisualStyleBackColor = true;
+            this.changeFoldersButton.Click += new System.EventHandler(this.changeFoldersButton_Click);
+            // 
             // SyncView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.GrayText;
-            this.ClientSize = new System.Drawing.Size(1166, 514);
+            this.ClientSize = new System.Drawing.Size(1149, 462);
             this.Controls.Add(this.flowLayoutPanel2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.splitContainer1);
@@ -520,8 +629,12 @@ namespace Synchronizer
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            this.flowLayoutPanel4.ResumeLayout(false);
+            this.flowLayoutPanel4.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            this.flowLayoutPanel3.ResumeLayout(false);
+            this.flowLayoutPanel3.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
             this.panel1.ResumeLayout(false);
@@ -580,6 +693,15 @@ namespace Synchronizer
         private System.Windows.Forms.ToolStripMenuItem historyToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ImageList sourceImageList;
+        private System.Windows.Forms.ImageList targetImageList;
+        private System.Windows.Forms.Label infoLable;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel4;
+        private System.Windows.Forms.Label srcFilesCountLabel;
+        private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel3;
+        private System.Windows.Forms.Label trgtCountAmountLabel;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button changeFoldersButton;
     }
 }
 

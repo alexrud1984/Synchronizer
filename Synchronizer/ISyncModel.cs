@@ -6,21 +6,51 @@ using System.Threading.Tasks;
 
 namespace Synchronizer
 {
+    public delegate void FoldersFilteredEventHandler (ISyncModel sender);
+
+    public delegate void FoldersComparedEventHandler(ISyncModel sender);
+
+    public delegate void FoldersSynchronizedEventHandler(ISyncModel sender);
+
+    public delegate void FolderUpdatedEventHandler(ISyncModel sender);
+
+    
     public interface ISyncModel
     {
-        List<Session> GetSessionsList();
+        string SourceFolder { set; }
 
-        void SessionSave(Session currentSession);
+        string TargetFolder { set; }
 
-        void SessionLoad(int sessionID);
+        string [] FileTypes { get; }
 
-        void SessionDelete(int sessionID);
+        int TypeSelected { set; }
 
-        void CompareFolders(Session currentSession);
+        List<ExtendedFileInfo> SourceFilesList { get; }
 
-        void SynchronizeFolders (Session currentSession);
+        List<ExtendedFileInfo> TargetFilesList { get; }
 
-        void GetHistory();
+        List<ExtendedFileInfo> FilteredSourceFileList { get; }
+
+        List<ExtendedFileInfo> FilteredTargetFileList { get; }
+
+        bool FileVersion { set; get; }
+
+        bool LastChange { set; get; }
+
+        bool AddMissedFile { set; get; }
+
+        void CompareFolders();
+
+        void SynchronizeFolders();
+
+
+        event FoldersFilteredEventHandler FoldersFiltered;
+
+        event FoldersComparedEventHandler FoldersCompared;
+
+        event FoldersSynchronizedEventHandler FoldersSynchronized;
+
+        event FolderUpdatedEventHandler FolderUpdated;
 
     }
 }

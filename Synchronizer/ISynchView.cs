@@ -28,14 +28,25 @@ namespace Synchronizer
 
     public delegate void TargetPathSelectedEventHandler(ISynchView sender);
 
+    public delegate void FileTypeSelectEventHandler(ISynchView sender);
+
+    public delegate void ChangeFoldersEventHandler(ISynchView sender);
+
+
 
     public interface ISynchView
     {
+        string InfoLable { set; get; }
+
+        bool IsViewUpdating { get; }
+
         string Source { set; get; }
 
         string Target { set; get; }
 
-        string[] FileType { set; }
+        string[] FileTypes { set; }
+
+        int FileTypeSelected { set; get; }
 
         bool FileVersion { set; get; }
 
@@ -47,11 +58,19 @@ namespace Synchronizer
 
         bool IncludeSubfolders { set; get; }
 
+        bool CompareButtonEnable { set; get; }
+
+        bool SyncButtonEnable { set; get; }
+
         string OperateSessionId { set; get; }
 
-        List<FileInfo> SourceFilesList { set; }
+        List<ExtendedFileInfo> SourceFilesList { set; }
 
-        List<FileInfo> TargetFilesList { set; }
+        List<ExtendedFileInfo> TargetFilesList { set; }
+
+        int SourceFilesCount { set; get; }
+
+        int TargetFilesCount { set; get; }
 
 
 
@@ -79,5 +98,8 @@ namespace Synchronizer
 
         event TargetPathSelectedEventHandler TargetPathSelected;
 
+        event FileTypeSelectEventHandler FileTypeSelect;
+
+        event ChangeFoldersEventHandler ChangeFolders;
     }
 }

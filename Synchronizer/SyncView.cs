@@ -7,6 +7,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -43,7 +44,7 @@ namespace Synchronizer
             }
         }
 
-        public string[] FileType
+        public string[] FileTypes
         {
              set
             {
@@ -109,28 +110,112 @@ namespace Synchronizer
 
         public string OperateSessionId { set; get; }
 
-        public List<FileInfo> SourceFilesList
+        public List<ExtendedFileInfo> SourceFilesList
         {
             set
             {
+                IsViewUpdating = true;
                 listViewUpdate(value, sourceListView);
+                IsViewUpdating = false;
             }
         }
 
-        public List<FileInfo> TargetFilesList
+        public List<ExtendedFileInfo> TargetFilesList
         {
             set
             {
-                throw new NotImplementedException();
+                listViewUpdate(value, TargetlistView);
+            }
+        }
+
+        public int FileTypeSelected
+        {
+            get
+            {
+                return fileTypeComboBox.SelectedIndex;
+            }
+
+            set
+            {
+                fileTypeComboBox.SelectedIndex=value;
+            }
+        }
+
+        public bool CompareButtonEnable
+        {
+            get
+            {
+                return compareButton.IsAccessible;
+            }
+
+            set
+            {
+                compareButton.Enabled = value;
+            }
+        }
+
+        public bool SyncButtonEnable
+        {
+            get
+            {
+                return synchButton.Enabled;
+            }
+
+            set
+            {
+                synchButton.Enabled=value;
+            }
+        }
+
+        public string InfoLable
+        {
+            get
+            {
+                return infoLable.Text;
+            }
+
+            set
+            {
+                infoLable.Text=value;
+            }
+        }
+
+        public bool IsViewUpdating { private set; get; }
+
+        public int SourceFilesCount
+        {
+            get
+            {
+                int result;
+                Int32.TryParse(srcFilesCountLabel.Text, out result);
+                return result;
+            }
+
+            set
+            {
+                srcFilesCountLabel.Text = value.ToString();
+            }
+        }
+
+        public int TargetFilesCount
+        {
+            get
+            {
+                int result;
+                Int32.TryParse(trgtCountAmountLabel.Text, out result);
+                return result;
+            }
+
+            set
+            {
+                trgtCountAmountLabel.Text = value.ToString();
             }
         }
 
         public SyncView()
         {
             InitializeComponent();
-            SyncPresenter syncPresenter = new SyncPresenter();
-            syncPresenter.AttachView(this);
-            syncPresenter.InitSyncView(this);
+            SyncPresenter syncPresenter = new SyncPresenter(this);
             error = new ErrorProvider();
         }
 
@@ -144,6 +229,8 @@ namespace Synchronizer
         public event AutoSyncEventOffHandler AutoSyncFoldersOff;
         public event SourcePathSelectedEventHandler SourcePathSelected;
         public event TargetPathSelectedEventHandler TargetPathSelected;
+        public event FileTypeSelectEventHandler FileTypeSelect;
+        public event ChangeFoldersEventHandler ChangeFolders;
 
         private void sourceBrouseButton_Click(object sender, EventArgs e)
         {
@@ -289,8 +376,22 @@ namespace Synchronizer
             }
         }
 
+        private void OnFileTypeSelect()
+        {
+            if (FileTypeSelect != null)
+            {
+                FileTypeSelect(this);
+            }
+        }
 
-        // temp - to delete
+        private void OnChangeFolders()
+        {
+            if (ChangeFolders != null)
+            {
+                ChangeFolders(this);
+            }
+        }
+
         public void Messanger(string msg)
         {
             MessageBox.Show(msg);
@@ -306,7 +407,7 @@ namespace Synchronizer
 
         private void fileTypeComboBox_SelectedIndexChanged_1(object sender, EventArgs e)
         {
-
+            OnFileTypeSelect();
         }
 
         private void targetBrouseButton_Click_1(object sender, EventArgs e)
@@ -364,20 +465,38 @@ namespace Synchronizer
             OnShowHistory();
         }
 
-        private void listViewUpdate(List<FileInfo> filesList, ListView listToUpdate)
+        private void listViewUpdate(List<ExtendedFileInfo> filesList, ListView listToUpdate)
         {
-            listToUpdate.Items.Clear();
-            listToUpdate.SmallImageList.Images.Clear();
-            foreach (FileInfo item in filesList)
+            try
             {
-                listToUpdate.SmallImageList.Images.Add(item.Name, System.Drawing.Icon.ExtractAssociatedIcon(item.FullName));
-                ListViewItem lvi = new ListViewItem(item.Name);
-                lvi.SubItems.Add(item.Extension);
-                lvi.SubItems.Add(FileVersionInfo.GetVersionInfo(item.FullName).FileVersion);
-                lvi.SubItems.Add(item.LastWriteTime.ToString());
-                listToUpdate.Items.Add(lvi);
-                listToUpdate.Items[listToUpdate.Items.Count - 1].ImageKey = item.Name;
+                listToUpdate.Items.Clear();
+                listToUpdate.SmallImageList.Images.Clear();
+
+                foreach (ExtendedFileInfo item in filesList)
+                {
+                    ListViewItem lvi = new ListViewItem(item.File.Name);
+                    listToUpdate.SmallImageList.Images.Add(item.File.Name, System.Drawing.Icon.ExtractAssociatedIcon(item.File.FullName));
+                    lvi.SubItems.Add(item.File.Extension);
+                    lvi.SubItems.Add(FileVersionInfo.GetVersionInfo(item.File.FullName).FileVersion);
+                    lvi.SubItems.Add(item.File.LastWriteTime.ToString());
+                    if (item.IsHighlighted)
+                    {
+                        lvi.ForeColor = item.HlColor;
+                    }
+                    listToUpdate.Items.Add(lvi);
+                    listToUpdate.Items[listToUpdate.Items.Count - 1].ImageKey = item.File.Name;
+                }
             }
+            catch (Exception)
+            {
+                Messanger("Someshing went wong! Try again.");
+            }
+
+        }
+
+        private void changeFoldersButton_Click(object sender, EventArgs e)
+        {
+            OnChangeFolders();
         }
     }
 }

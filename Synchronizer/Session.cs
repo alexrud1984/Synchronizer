@@ -8,21 +8,35 @@ namespace Synchronizer
 {
     public class Session
     {
-        string Source { set; get; }
+        static int count = 0;
 
-        string Target { set; get; }
+        public int SessionId { private set; get; }
 
-        string FileType { set; get; }
+        public string Source { set; get; }
 
-        bool FileVersion { set; get; }
+        public string Target { set; get; }
 
-        bool LastChange { set; get; }
+        public string FileTypeSelected { set; get; }
 
-        bool AddMissedFile { set; get; }
+        public bool FileVersion { set; get; }
 
-        bool AutoSynch { set; get; }
+        public bool LastChange { set; get; }
 
-        bool IncludeSubfolders { set; get; }
+        public bool AddMissedFile { set; get; }
+
+        public bool AutoSynch { set; get; }
+
+        public bool IncludeSubfolders { set; get; }
+
+        public List<ExtendedFileInfo> SourceFiles { set; get; }
+
+        public List<ExtendedFileInfo> TargetFiles { set; get; }
+
+        public Session()
+        {
+            SessionId = count;
+            count++;
+        }
 
     }
 }

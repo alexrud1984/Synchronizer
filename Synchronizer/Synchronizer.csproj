@@ -47,7 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FileExtenden.cs" />
+    <Compile Include="ExtendedFileInfo.cs" />
+    <Compile Include="SyncModel.cs" />
     <Compile Include="SyncView.cs">
       <SubType>Form</SubType>
     </Compile>
