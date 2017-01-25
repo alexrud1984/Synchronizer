@@ -13,6 +13,7 @@ namespace Synchronizer
         private string sourceFolder;
         private string targetFolder;
         private string typeSelected;
+        private bool autoSyncStatus;
         private FileSystemWatcher sourceDirectoryWatcher;
         private FileSystemWatcher targetDirectoryWatcher;
         private string[] fileTypes;
@@ -27,6 +28,26 @@ namespace Synchronizer
 
         private List<ExtendedFileInfo> filteredTargetFileList;
 
+        public bool AutoSync
+        {
+            set
+            {
+                if (value)
+                {
+                    autoSyncStatus = true;
+                    SynchronizeFolders();
+                }
+                else
+                {
+                    autoSyncStatus = false;
+                }
+            }
+
+            get
+            {
+                return autoSyncStatus;
+            }
+        }
         public string[] FileTypes
         {
             get
@@ -212,7 +233,6 @@ namespace Synchronizer
             isSynchronizing = false;
             OnFoldersSynchronized();
         }
-
 
         private void filterFileList(string filter, List<ExtendedFileInfo> toFilter, List<ExtendedFileInfo> filtered)
         {
@@ -463,25 +483,39 @@ namespace Synchronizer
 
         private void SourceDirectoryWatcher_Updated(object sender, FileSystemEventArgs e)
         {
-            if (SourceFilesCount == Directory.GetFiles(sourceFolder).Count() || isSynchronizing)
+            if (isSynchronizing)
             {
                 return;
             }
-            bool isFolderStillUpdating = true;
-
-            //wait if files list in folder still updating
-            do
+            //Autosynchronization if it is On
+            if (AutoSync)
             {
-                FilesListInit(sourceFilesList, filteredSourceFileList, sourceFolder);
-                Thread.Sleep(2000);
+                SynchronizeFolders();
+            }
+            //Source files list update
+            else
+            {
+
                 if (SourceFilesCount == Directory.GetFiles(sourceFolder).Count())
                 {
-                    isFolderStillUpdating = false;
+                    return;
                 }
-            }
-            while (isFolderStillUpdating);
+                bool isFolderStillUpdating = true;
 
-            OnFolderUpdated();
+                //wait if files list in folder still updating
+                do
+                {
+                    FilesListInit(sourceFilesList, filteredSourceFileList, sourceFolder);
+                    Thread.Sleep(2000);
+                    if (SourceFilesCount == Directory.GetFiles(sourceFolder).Count())
+                    {
+                        isFolderStillUpdating = false;
+                    }
+                }
+                while (isFolderStillUpdating);
+
+                OnFolderUpdated();
+            }
         }
 
         private void TargetDirectoryWatcher_Updated(object sender, FileSystemEventArgs e)

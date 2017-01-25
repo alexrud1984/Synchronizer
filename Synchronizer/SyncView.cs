@@ -93,8 +93,6 @@ namespace Synchronizer
             }
         }
 
-        public bool AutoSynch { set; get; }
-
         public bool IncludeSubfolders
         {
             get
@@ -158,12 +156,12 @@ namespace Synchronizer
         {
             get
             {
-                return synchButton.Enabled;
+                return synchButton.IsAccessible;
             }
 
             set
             {
-                synchButton.Enabled=value;
+                synchButton.Enabled = value;
             }
         }
 
@@ -476,16 +474,18 @@ namespace Synchronizer
         {
             if (IsDataValid())
             {
+                autosyncStateLabel.Text = "On";
                 OnAutoSyncFoldersOn();
             }
         }
 
         private void offToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
+            autosyncStateLabel.Text = "Off";
             OnAutoSyncFoldersOff();
         }
 
-        private void historyToolStripMenuItem_Click_1(object sender, EventArgs e)
+    private void historyToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
             OnShowHistory();
         }

@@ -54,8 +54,6 @@ namespace Synchronizer
 
         bool AddMissedFile { set; get; }
 
-        bool AutoSynch { set; get; }
-
         bool IncludeSubfolders { set; get; }
 
         bool CompareButtonEnable { set; get; }

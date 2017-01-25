@@ -39,6 +39,8 @@ namespace Synchronizer
 
         bool AddMissedFile { set; get; }
 
+        bool AutoSync { set; get; }
+
         void CompareFolders();
 
         void SynchronizeFolders();

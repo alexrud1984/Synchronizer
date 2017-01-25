@@ -44,12 +44,15 @@ namespace Synchronizer
 
         public void AutoSyncOff(ISynchView syncView)
         {
-            syncView.Messanger("AutosyncOff");
+            syncModel.AutoSync = false;
         }
 
         public void AutoSyncOn(ISynchView syncView)
         {
-            syncView.Messanger("Autosync on");
+            syncModel.AddMissedFile = syncView.AddMissedFile;
+            syncModel.FileVersion = syncView.FileVersion;
+            syncModel.LastChange = syncView.LastChange;
+            syncModel.AutoSync = true;
         }
 
         public void CompareFolders(ISynchView syncView)
@@ -203,7 +206,7 @@ namespace Synchronizer
                 if (!item.IsExists)
                 {
                     item.IsHighlighted = true;
-                    item.HlColor = Color.SeaGreen;
+                    item.HlColor = Color.Tomato;
                 }
                 else
                 {
@@ -213,25 +216,19 @@ namespace Synchronizer
                 if (syncModel.FileVersion && item.IsVersionHigh)
                 {
                     item.IsHighlighted = true;
-                    item.HlColor = Color.Tomato;
+                    item.HlColor = Color.SeaGreen;
                 }
 
                 if (syncModel.LastChange && item.IsLastChangeHigh)
                 {
                     item.IsHighlighted = true;
-                    item.HlColor = Color.Tomato;
+                    item.HlColor = Color.SeaGreen;
                 }
             }
         }
 
         private void ChangeFolders(ISynchView syncView)
         {
-            /*           DetachModel(syncModel);
-                       syncModel = null;
-                       GC.Collect();
-                       GC.WaitForPendingFinalizers();
-                       syncModel = new SyncModel();
-                       AttachModel(syncModel);*/
             string tempPath = syncView.Source;
             syncView.Source = syncModel.SourceFolder = syncView.Target;
             syncView.Target = syncModel.TargetFolder = tempPath;
