@@ -176,7 +176,10 @@ namespace Synchronizer
 
             set
             {
-                infoLable.Text=value;
+                infoLable.Invoke((Action)delegate 
+                {
+                    infoLable.Text = value;
+                });
             }
         }
 
@@ -193,7 +196,18 @@ namespace Synchronizer
 
             set
             {
-                srcFilesCountLabel.Text = value.ToString();
+                if (!srcFilesCountLabel.InvokeRequired)
+                {
+                    srcFilesCountLabel.Text = value.ToString();
+                }
+                else
+                {
+                    srcFilesCountLabel.Invoke((Action)delegate
+                    {
+                        srcFilesCountLabel.Text = value.ToString();
+                    });
+                }
+
             }
         }
 
@@ -208,7 +222,17 @@ namespace Synchronizer
 
             set
             {
-                trgtCountAmountLabel.Text = value.ToString();
+                if (!trgtCountAmountLabel.InvokeRequired)
+                {
+                    trgtCountAmountLabel.Text = value.ToString();
+                }
+                else
+                {
+                    trgtCountAmountLabel.Invoke((Action)delegate
+                   {
+                       trgtCountAmountLabel.Text = value.ToString();
+                   });
+                }
             }
         }
 
@@ -469,22 +493,52 @@ namespace Synchronizer
         {
             try
             {
-                listToUpdate.Items.Clear();
-                listToUpdate.SmallImageList.Images.Clear();
-
-                foreach (ExtendedFileInfo item in filesList)
+                if (!listToUpdate.InvokeRequired)
                 {
-                    ListViewItem lvi = new ListViewItem(item.File.Name);
-                    listToUpdate.SmallImageList.Images.Add(item.File.Name, System.Drawing.Icon.ExtractAssociatedIcon(item.File.FullName));
-                    lvi.SubItems.Add(item.File.Extension);
-                    lvi.SubItems.Add(FileVersionInfo.GetVersionInfo(item.File.FullName).FileVersion);
-                    lvi.SubItems.Add(item.File.LastWriteTime.ToString());
-                    if (item.IsHighlighted)
+                    listToUpdate.Items.Clear();
+                    listToUpdate.SmallImageList.Images.Clear();
+
+                    foreach (ExtendedFileInfo item in filesList)
                     {
-                        lvi.ForeColor = item.HlColor;
+                        ListViewItem lvi = new ListViewItem(item.File.Name);
+                        listToUpdate.SmallImageList.Images.Add(item.File.Name, System.Drawing.Icon.ExtractAssociatedIcon(item.File.FullName));
+                        lvi.SubItems.Add(item.File.Extension);
+                        lvi.SubItems.Add(FileVersionInfo.GetVersionInfo(item.File.FullName).FileVersion);
+                        lvi.SubItems.Add(item.File.LastWriteTime.ToString());
+                        if (item.IsHighlighted)
+                        {
+                            lvi.ForeColor = item.HlColor;
+                        }
+                        listToUpdate.Items.Add(lvi);
+                        listToUpdate.Items[listToUpdate.Items.Count - 1].ImageKey = item.File.Name;
                     }
-                    listToUpdate.Items.Add(lvi);
-                    listToUpdate.Items[listToUpdate.Items.Count - 1].ImageKey = item.File.Name;
+                }
+                else
+                {
+                    listToUpdate.Invoke((Action)delegate
+                    {
+                        listToUpdate.Items.Clear();
+                        listToUpdate.SmallImageList.Images.Clear();
+
+                        foreach (ExtendedFileInfo item in filesList)
+                        {
+                            ListViewItem lvi = new ListViewItem(item.File.Name);
+               //             if (File.Exists(item.File.FullName))
+                            {
+                                listToUpdate.SmallImageList.Images.Add(item.File.Name, System.Drawing.Icon.ExtractAssociatedIcon(item.File.FullName));
+                            }
+                            lvi.SubItems.Add(item.File.Extension);
+                            lvi.SubItems.Add(item.Version);
+                            lvi.SubItems.Add(item.File.LastWriteTime.ToString());
+                            if (item.IsHighlighted)
+                            {
+                                lvi.ForeColor = item.HlColor;
+                            }
+                            listToUpdate.Items.Add(lvi);
+                            listToUpdate.Items[listToUpdate.Items.Count - 1].ImageKey = item.File.Name;
+                        }
+                    });
+
                 }
             }
             catch (Exception)

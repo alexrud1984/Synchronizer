@@ -111,9 +111,9 @@ namespace Synchronizer
         public void SourcePathSelected(ISynchView syncView)
         {
             syncModel.SourceFolder = syncView.Source;
-            syncView.SourceFilesList = syncModel.SourceFilesList;
+            syncView.SourceFilesList = syncModel.FilteredSourceFileList;
             syncView.FileTypes = syncModel.FileTypes;
-            syncView.SourceFilesCount = syncModel.SourceFilesList.Count;
+            syncView.SourceFilesCount = syncModel.SourceFilesCount;
         }
 
         public void SyncFolder(ISynchView syncView)
@@ -129,12 +129,14 @@ namespace Synchronizer
         public void TargetPathSelected(ISynchView syncView)
         {
             syncModel.TargetFolder = syncView.Target;
-            syncView.TargetFilesList = syncModel.TargetFilesList;
-            syncView.TargetFilesCount = syncModel.TargetFilesList.Count;
+            syncView.TargetFilesList = syncModel.FilteredTargetFileList;
+            syncView.TargetFilesCount = syncModel.TargetFilesCount;
         }
 
         public void FoldersSynchronized(ISyncModel syncModel)
         {
+            HighlightFilesList(syncModel.FilteredSourceFileList);
+            HighlightFilesList(syncModel.FilteredTargetFileList);
             syncView.SourceFilesList = syncModel.FilteredSourceFileList;
             syncView.TargetFilesList = syncModel.FilteredTargetFileList;
             syncView.TargetFilesCount = syncModel.FilteredTargetFileList.Count;
@@ -145,8 +147,8 @@ namespace Synchronizer
 
         public void FoldersCompared(ISyncModel syncModel)
         {
-            HighlightComparedFilesList(syncModel.FilteredSourceFileList);
-            HighlightComparedFilesList(syncModel.FilteredTargetFileList);
+            HighlightFilesList(syncModel.FilteredSourceFileList);
+            HighlightFilesList(syncModel.FilteredTargetFileList);
 
             syncView.SourceFilesList = syncModel.FilteredSourceFileList;
             syncView.TargetFilesList = syncModel.FilteredTargetFileList;
@@ -160,8 +162,8 @@ namespace Synchronizer
             syncView.SourceFilesList = syncModel.FilteredSourceFileList;
             syncView.TargetFilesList = syncModel.FilteredTargetFileList;
 
-            syncView.TargetFilesCount = syncModel.TargetFilesList.Count;
-            syncView.SourceFilesCount = syncModel.SourceFilesList.Count;
+            syncView.TargetFilesCount = syncModel.TargetFilesCount;
+            syncView.SourceFilesCount = syncModel.SourceFilesCount;
 
         }
 
@@ -183,47 +185,61 @@ namespace Synchronizer
 
         public void FolderUpdated(ISyncModel syncModel)
         {
-/*            while (syncView.IsViewUpdating)
+            while (syncView.IsViewUpdating)
             {
                 Thread.Sleep(2000);
             }
-            syncView.SourceFilesList = syncModel.SourceFilesList;
-            syncView.InfoLable = "Folders been updated!";*/
+            syncView.SourceFilesList = syncModel.FilteredSourceFileList;
+            syncView.TargetFilesList = syncModel.FilteredTargetFileList;
+            syncView.SourceFilesCount = syncModel.SourceFilesCount;
+            syncView.TargetFilesCount = syncModel.TargetFilesCount;
+            syncView.InfoLable = "Folders been updated!";
         }
 
-        private void HighlightComparedFilesList(List<ExtendedFileInfo> list)
+        private void HighlightFilesList(List<ExtendedFileInfo> list)
         {
             foreach (ExtendedFileInfo item in list)
             {
                 if (!item.IsExists)
                 {
                     item.IsHighlighted = true;
-                    item.HlColor = Color.Green;
+                    item.HlColor = Color.SeaGreen;
+                }
+                else
+                {
+                    item.HlColor = Color.Black;
                 }
 
                 if (syncModel.FileVersion && item.IsVersionHigh)
                 {
                     item.IsHighlighted = true;
-                    item.HlColor = Color.Yellow;
+                    item.HlColor = Color.Tomato;
                 }
 
                 if (syncModel.LastChange && item.IsLastChangeHigh)
                 {
                     item.IsHighlighted = true;
-                    item.HlColor = Color.Yellow;
+                    item.HlColor = Color.Tomato;
                 }
             }
         }
 
         private void ChangeFolders(ISynchView syncView)
         {
+            /*           DetachModel(syncModel);
+                       syncModel = null;
+                       GC.Collect();
+                       GC.WaitForPendingFinalizers();
+                       syncModel = new SyncModel();
+                       AttachModel(syncModel);*/
             string tempPath = syncView.Source;
             syncView.Source = syncModel.SourceFolder = syncView.Target;
             syncView.Target = syncModel.TargetFolder = tempPath;
-            syncView.SourceFilesList = syncModel.SourceFilesList;
-            syncView.TargetFilesList = syncModel.TargetFilesList;
-            syncView.SourceFilesCount = syncModel.SourceFilesList.Count;
-            syncView.TargetFilesCount = syncModel.TargetFilesList.Count;
+            syncView.SourceFilesList = syncModel.FilteredSourceFileList;
+            syncView.TargetFilesList = syncModel.FilteredTargetFileList;
+            syncView.SourceFilesCount = syncModel.SourceFilesCount;
+            syncView.TargetFilesCount = syncModel.TargetFilesCount;
+            syncModel.TypeSelected = syncView.FileTypeSelected;
         }
     }
 }

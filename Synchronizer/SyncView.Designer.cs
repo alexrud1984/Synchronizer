@@ -31,7 +31,7 @@ namespace Synchronizer
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("");
+            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("");
             this.sourceListView = new System.Windows.Forms.ListView();
             this.fileName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.fileType = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -271,7 +271,7 @@ namespace Synchronizer
             this.columnHeader3,
             this.columnHeader4});
             this.TargetlistView.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem2});
+            listViewItem1});
             this.TargetlistView.Location = new System.Drawing.Point(3, 30);
             this.TargetlistView.Name = "TargetlistView";
             this.TargetlistView.Size = new System.Drawing.Size(565, 355);
@@ -514,8 +514,8 @@ namespace Synchronizer
             this.flowLayoutPanel2.Controls.Add(this.addMissedCheckBox);
             this.flowLayoutPanel2.Controls.Add(this.subfoldersCheckBox);
             this.flowLayoutPanel2.Controls.Add(this.compareButton);
-            this.flowLayoutPanel2.Controls.Add(this.infoLable);
             this.flowLayoutPanel2.Controls.Add(this.synchButton);
+            this.flowLayoutPanel2.Controls.Add(this.infoLable);
             this.flowLayoutPanel2.Location = new System.Drawing.Point(0, 25);
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
             this.flowLayoutPanel2.Size = new System.Drawing.Size(1149, 26);
@@ -580,7 +580,7 @@ namespace Synchronizer
             // synchButton
             // 
             this.synchButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.synchButton.Location = new System.Drawing.Point(513, 0);
+            this.synchButton.Location = new System.Drawing.Point(507, 0);
             this.synchButton.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
             this.synchButton.Name = "synchButton";
             this.synchButton.Size = new System.Drawing.Size(89, 26);
@@ -594,7 +594,7 @@ namespace Synchronizer
             this.infoLable.AutoSize = true;
             this.infoLable.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.infoLable.ForeColor = System.Drawing.Color.Red;
-            this.infoLable.Location = new System.Drawing.Point(507, 6);
+            this.infoLable.Location = new System.Drawing.Point(602, 6);
             this.infoLable.Margin = new System.Windows.Forms.Padding(3, 6, 3, 0);
             this.infoLable.Name = "infoLable";
             this.infoLable.Size = new System.Drawing.Size(0, 13);

@@ -14,22 +14,48 @@ namespace Synchronizer
         private string targetFolder;
         private int typeSelected;
         private FileSystemWatcher sourceDirectoryWatcher;
+        private FileSystemWatcher targetDirectoryWatcher;
+        private string[] fileTypes;
+        private bool isSynchronizing;
 
-        public string[] FileTypes { get; private set; }
 
-        public List<ExtendedFileInfo> SourceFilesList { get; private set; }
-      
+        private List<ExtendedFileInfo> sourceFilesList;
+
+        private List<ExtendedFileInfo> targetFilesList;
+
+        private List<ExtendedFileInfo> filteredSourceFileList;
+
+        private List<ExtendedFileInfo> filteredTargetFileList;
+
+        public string[] FileTypes
+        {
+            get
+            {
+                return (string[])fileTypes.Clone();
+            }
+        }
+
         public string SourceFolder
         {
             set
             {
-                sourceFolder = value;
-                SourceListInit();
-                sourceDirectoryWatcher = new FileSystemWatcher(SourceFolder);
-                sourceDirectoryWatcher.EnableRaisingEvents = true;
-                sourceDirectoryWatcher.Changed += SourceDirectoryWatcher_Updated;
-                sourceDirectoryWatcher.Deleted += SourceDirectoryWatcher_Updated;
-                sourceDirectoryWatcher.Created += SourceDirectoryWatcher_Updated;
+                if (!String.IsNullOrEmpty(value))
+                {
+                    SourceWindowsEventsDetach();
+                    sourceFolder = value;
+                    SourceListInit();
+                    SourceWindowsEventsAttach();
+                }
+                else
+                {
+                    sourceFolder = String.Empty;
+                    sourceFilesList.Clear();
+                    filteredSourceFileList.Clear();
+                    fileTypes = new string[] { "*" };
+                    SourceWindowsEventsDetach();
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+                }
             }
             private get
             {
@@ -39,20 +65,48 @@ namespace Synchronizer
 
         private void SourceDirectoryWatcher_Updated(object sender, FileSystemEventArgs e)
         {
-            CleanCompareData();
-            SourceListInit();
+            if (SourceFilesCount == Directory.GetFiles(sourceFolder).Count() || isSynchronizing)
+            {
+                return;
+            }
+            bool isFolderStillUpdating = true;
+
+            //wait if files list in folder still updating
+            do
+            {
+                TargetListInit();
+                SourceListInit();
+                Thread.Sleep(2000);
+                if (SourceFilesCount == Directory.GetFiles(targetFolder).Count())
+                {
+                    isFolderStillUpdating = false;
+                }
+            }
+            while (isFolderStillUpdating);
+
             OnFolderUpdated();
         }
-
-        public List<ExtendedFileInfo> TargetFilesList { get; private set; }
-       
 
         public string TargetFolder
         {
             set
             {
-                targetFolder = value;
-                TargetListInit();
+                if (!String.IsNullOrEmpty(value))
+                {
+                    TargetwindowsEventsDetach();
+                    targetFolder = value;
+                    TargetListInit();
+                    TargetwindowsEventsAttach();
+                }
+                else
+                {
+                    targetFolder = String.Empty;
+                    targetFilesList.Clear();
+                    filteredTargetFileList.Clear();
+                    TargetwindowsEventsDetach();
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
+                }
             }
 
             get
@@ -61,13 +115,37 @@ namespace Synchronizer
             }
         }
 
+        private void TargetDirectoryWatcher_Updated(object sender, FileSystemEventArgs e)
+        {
+            if (TargetFilesCount == Directory.GetFiles(targetFolder).Count() || isSynchronizing)
+            {
+                return;
+            }
+            bool isFolderStillUpdating = true;
+
+            //wait if files list in folder still updating
+            do
+            {
+                TargetListInit();
+                SourceListInit();
+                Thread.Sleep(2000);
+                if (TargetFilesCount == Directory.GetFiles(targetFolder).Count())
+                {
+                    isFolderStillUpdating = false;
+                }
+            }
+            while (isFolderStillUpdating);
+
+            OnFolderUpdated();
+        }
+
         public int TypeSelected
         {
             set
             {
                 typeSelected = value;
-                filterFileList(FileTypes[typeSelected], SourceFilesList, FilteredSourceFileList);
-                filterFileList(FileTypes[typeSelected], TargetFilesList, FilteredTargetFileList);
+                filterFileList(fileTypes[typeSelected], sourceFilesList, filteredSourceFileList);
+                filterFileList(fileTypes[typeSelected], targetFilesList, filteredTargetFileList);
                 OnFoldersFiltered();
             }
 
@@ -77,9 +155,21 @@ namespace Synchronizer
             }
         }
 
-        public List<ExtendedFileInfo> FilteredSourceFileList { get; private set; }
+        public List<ExtendedFileInfo> FilteredSourceFileList
+        {
+            get
+            {
+                return new List<ExtendedFileInfo>(filteredSourceFileList);
+            }
+        }
 
-        public List<ExtendedFileInfo> FilteredTargetFileList { get; private set; }
+        public List<ExtendedFileInfo> FilteredTargetFileList
+        {
+            get
+            {
+                return new List<ExtendedFileInfo>(filteredTargetFileList);
+            }
+        }
 
         public bool FileVersion { set; get; }
 
@@ -87,14 +177,29 @@ namespace Synchronizer
 
         public bool AddMissedFile { set; get; }
 
+        public int SourceFilesCount
+        {
+            get
+            {
+                return sourceFilesList.Count;
+            }
+        }
+
+        public int TargetFilesCount
+        {
+            get
+            {
+                return targetFilesList.Count;
+            }
+        }
 
         public SyncModel()
         {
-            FileTypes = new string[] { "*" };
-            SourceFilesList = new List<ExtendedFileInfo>();
-            FilteredSourceFileList = new List<ExtendedFileInfo>();
-            TargetFilesList = new List<ExtendedFileInfo>();
-            FilteredTargetFileList = new List<ExtendedFileInfo>();
+            fileTypes = new string[] { "*" };
+            sourceFilesList = new List<ExtendedFileInfo>();
+            filteredSourceFileList = new List<ExtendedFileInfo>();
+            targetFilesList = new List<ExtendedFileInfo>();
+            filteredTargetFileList = new List<ExtendedFileInfo>();
         }
 
         public event FoldersFilteredEventHandler FoldersFiltered;
@@ -105,15 +210,19 @@ namespace Synchronizer
         public void CompareFolders()
         {
             CompareAccorrdingSettings();
-            filterFileList(FileTypes[typeSelected], SourceFilesList, FilteredSourceFileList);
-            filterFileList(FileTypes[typeSelected], TargetFilesList, FilteredTargetFileList);
+            filterFileList(fileTypes[typeSelected], sourceFilesList, filteredSourceFileList);
+            filterFileList(fileTypes[typeSelected], targetFilesList, filteredTargetFileList);
             OnFoldersCompared();
         }
 
         public void SynchronizeFolders()
         {
+            targetDirectoryWatcher.EnableRaisingEvents = false;
+            sourceDirectoryWatcher.EnableRaisingEvents = false;
+            isSynchronizing = true;
+
             CompareAccorrdingSettings();
-            foreach (var itemS in FilteredSourceFileList)
+            foreach (var itemS in filteredSourceFileList)
             {
                 if (AddMissedFile && !itemS.IsExists)
                 {
@@ -121,7 +230,7 @@ namespace Synchronizer
                 }
                 else
                 {
-                    foreach (var itemT in FilteredTargetFileList)
+                    foreach (var itemT in filteredTargetFileList)
                     {
                         if (itemS.File.Name == itemT.File.Name)
                         {
@@ -134,6 +243,10 @@ namespace Synchronizer
                 }
             }
             TargetListInit();
+            SourceListInit();
+            targetDirectoryWatcher.EnableRaisingEvents = true;
+            sourceDirectoryWatcher.EnableRaisingEvents = true;
+            isSynchronizing = false;
             OnFoldersSynchronized();
         }
 
@@ -154,6 +267,7 @@ namespace Synchronizer
         {
             for (int i = 0; i < source.Count; i++)
             {
+                source[i].IsExists = false;
                 for (int j = 0; j < target.Count; j++)
                 {
                     if (source[i].File.Name == target[j].File.Name)
@@ -240,69 +354,141 @@ namespace Synchronizer
         }
         private void CleanCompareData()
         {
-            foreach (var item in SourceFilesList)
+            foreach (var item in sourceFilesList)
             {
-                item.HlColor = System.Drawing.Color.Black;
-                item.IsHighlighted = false;
-                item.IsLastChangeHigh = false;
-                item.IsVersionHigh = false;
+                item.SetDefaultValues();
+            }
+            foreach (var item in targetFilesList)
+            {
+                item.SetDefaultValues();
             }
         }
 
         private void SourceListInit ()
         {
             List<string> types = new List<string>();
-            SourceFilesList.Clear();
-            FilteredSourceFileList.Clear();
+            sourceFilesList.Clear();
+            filteredSourceFileList.Clear();
             foreach (string item in Directory.GetFiles(sourceFolder))
             {
-                ExtendedFileInfo efi = new ExtendedFileInfo(item);
-                SourceFilesList.Add(efi);
-                types.Add(efi.File.Extension);
+                if (File.Exists(item))
+                {
+                    ExtendedFileInfo efi = new ExtendedFileInfo(item);
+                    sourceFilesList.Add(efi);
+                    types.Add(efi.File.Extension);
+                }
             }
-            SourceFilesList.Sort();
-            types = types.Distinct().ToList();
-            FileTypes = new string[types.Count + 1];
-            FileTypes[0] = "*";
+            sourceFilesList.Sort();
 
-            for (int i = 1; i < FileTypes.Length; i++)
+            types = types.Distinct().ToList();
+            types.Sort();
+
+            fileTypes = new string[types.Count + 1];
+            fileTypes[0] = "*";
+
+            for (int i = 1; i < fileTypes.Length; i++)
             {
-                FileTypes[i] = types[i - 1];
+                fileTypes[i] = types[i - 1];
             }
-            filterFileList(FileTypes[typeSelected], SourceFilesList, FilteredSourceFileList);
-            CleanCompareData();
+            filterFileList(fileTypes[typeSelected], sourceFilesList, filteredSourceFileList);
         }
 
         private void TargetListInit()
         {
-            TargetFilesList.Clear();
-            FilteredTargetFileList.Clear();
+            targetFilesList.Clear();
+            filteredTargetFileList.Clear();
             foreach (string item in Directory.GetFiles(targetFolder))
             {
                 ExtendedFileInfo efi = new ExtendedFileInfo(item);
-                TargetFilesList.Add(efi);
+                targetFilesList.Add(efi);
             }
 
-            TargetFilesList.Sort();
-            filterFileList(FileTypes[typeSelected], TargetFilesList, FilteredTargetFileList);
-            CleanCompareData();
+            targetFilesList.Sort();
+            filterFileList(fileTypes[typeSelected], targetFilesList, filteredTargetFileList);
         }
 
         private void CompareAccorrdingSettings()
         {
             CleanCompareData();
-            CheckExist(SourceFilesList, TargetFilesList);
-            CheckExist(TargetFilesList, SourceFilesList);
+            CheckExist(sourceFilesList, targetFilesList);
+            CheckExist(targetFilesList, sourceFilesList);
             if (FileVersion)
             {
-                CompareFileVersion(SourceFilesList, TargetFilesList);
-                CompareFileVersion(TargetFilesList, SourceFilesList);
+                CompareFileVersion(sourceFilesList, targetFilesList);
+                CompareFileVersion(targetFilesList, sourceFilesList);
             }
             if (LastChange)
             {
-                CompareLastChange(SourceFilesList, TargetFilesList);
-                CompareLastChange(TargetFilesList, SourceFilesList);
+                CompareLastChange(sourceFilesList, targetFilesList);
+                CompareLastChange(targetFilesList, sourceFilesList);
             }
         }
+
+        private long GetDirctorySize(string path)
+        {
+            DirectoryInfo di = new DirectoryInfo(path);
+            long size = 0;
+            FileInfo [] fileList = di.GetFiles();
+            foreach (FileInfo item in fileList)
+            {
+                try
+                {
+                    size += item.Length;
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    //add to log in future
+                }
+            }
+            return size;
+        }
+
+        private void SourceWindowsEventsAttach()
+        {
+            sourceDirectoryWatcher = new FileSystemWatcher(sourceFolder);
+            sourceDirectoryWatcher.EnableRaisingEvents = true;
+            sourceDirectoryWatcher.Changed += SourceDirectoryWatcher_Updated;
+            sourceDirectoryWatcher.Deleted += SourceDirectoryWatcher_Updated;
+            sourceDirectoryWatcher.Created += SourceDirectoryWatcher_Updated;
+            sourceDirectoryWatcher.Renamed += SourceDirectoryWatcher_Updated;
+        }
+
+        private void TargetwindowsEventsAttach()
+        {
+            targetDirectoryWatcher = new FileSystemWatcher(targetFolder);
+            targetDirectoryWatcher.EnableRaisingEvents = true;
+            targetDirectoryWatcher.Changed += TargetDirectoryWatcher_Updated;
+            targetDirectoryWatcher.Renamed += TargetDirectoryWatcher_Updated;
+            targetDirectoryWatcher.Created += TargetDirectoryWatcher_Updated;
+            targetDirectoryWatcher.Deleted += TargetDirectoryWatcher_Updated;
+        }
+
+        private void SourceWindowsEventsDetach()
+        {
+            if (sourceDirectoryWatcher != null)
+            {
+                sourceDirectoryWatcher.EnableRaisingEvents = false;
+                sourceDirectoryWatcher.Changed -= SourceDirectoryWatcher_Updated;
+                sourceDirectoryWatcher.Deleted -= SourceDirectoryWatcher_Updated;
+                sourceDirectoryWatcher.Created -= SourceDirectoryWatcher_Updated;
+                sourceDirectoryWatcher.Renamed -= SourceDirectoryWatcher_Updated;
+                sourceDirectoryWatcher.Dispose();
+            }
+        }
+
+        private void TargetwindowsEventsDetach()
+        {
+            if (targetDirectoryWatcher != null)
+            {
+            targetDirectoryWatcher.EnableRaisingEvents = false;
+            targetDirectoryWatcher.Changed -= TargetDirectoryWatcher_Updated;
+            targetDirectoryWatcher.Renamed -= TargetDirectoryWatcher_Updated;
+            targetDirectoryWatcher.Created -= TargetDirectoryWatcher_Updated;
+            targetDirectoryWatcher.Deleted -= TargetDirectoryWatcher_Updated;
+            targetDirectoryWatcher.Dispose();
+
+            }
+        }
+
     }
 }

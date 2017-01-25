@@ -23,11 +23,11 @@ namespace Synchronizer
 
         string [] FileTypes { get; }
 
+        int SourceFilesCount { get; }
+
+        int TargetFilesCount { get; }
+
         int TypeSelected { set; }
-
-        List<ExtendedFileInfo> SourceFilesList { get; }
-
-        List<ExtendedFileInfo> TargetFilesList { get; }
 
         List<ExtendedFileInfo> FilteredSourceFileList { get; }
 
@@ -42,7 +42,6 @@ namespace Synchronizer
         void CompareFolders();
 
         void SynchronizeFolders();
-
 
         event FoldersFilteredEventHandler FoldersFiltered;
 
