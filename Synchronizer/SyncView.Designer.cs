@@ -47,6 +47,7 @@ namespace Synchronizer
             this.source = new System.Windows.Forms.Label();
             this.sourceBrouseButton = new System.Windows.Forms.Button();
             this.sourcePathTextBox = new System.Windows.Forms.TextBox();
+            this.changeFoldersButton = new System.Windows.Forms.Button();
             this.TargetlistView = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -82,7 +83,7 @@ namespace Synchronizer
             this.compareButton = new System.Windows.Forms.Button();
             this.synchButton = new System.Windows.Forms.Button();
             this.infoLable = new System.Windows.Forms.Label();
-            this.changeFoldersButton = new System.Windows.Forms.Button();
+            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -259,6 +260,16 @@ namespace Synchronizer
             this.sourcePathTextBox.ReadOnly = true;
             this.sourcePathTextBox.Size = new System.Drawing.Size(430, 20);
             this.sourcePathTextBox.TabIndex = 4;
+            // 
+            // changeFoldersButton
+            // 
+            this.changeFoldersButton.Location = new System.Drawing.Point(6, 3);
+            this.changeFoldersButton.Name = "changeFoldersButton";
+            this.changeFoldersButton.Size = new System.Drawing.Size(37, 22);
+            this.changeFoldersButton.TabIndex = 9;
+            this.changeFoldersButton.Text = "<=>";
+            this.changeFoldersButton.UseVisualStyleBackColor = true;
+            this.changeFoldersButton.Click += new System.EventHandler(this.changeFoldersButton_Click);
             // 
             // TargetlistView
             // 
@@ -600,16 +611,6 @@ namespace Synchronizer
             this.infoLable.Size = new System.Drawing.Size(0, 13);
             this.infoLable.TabIndex = 6;
             // 
-            // changeFoldersButton
-            // 
-            this.changeFoldersButton.Location = new System.Drawing.Point(6, 3);
-            this.changeFoldersButton.Name = "changeFoldersButton";
-            this.changeFoldersButton.Size = new System.Drawing.Size(37, 22);
-            this.changeFoldersButton.TabIndex = 9;
-            this.changeFoldersButton.Text = "<=>";
-            this.changeFoldersButton.UseVisualStyleBackColor = true;
-            this.changeFoldersButton.Click += new System.EventHandler(this.changeFoldersButton_Click);
-            // 
             // SyncView
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -702,6 +703,7 @@ namespace Synchronizer
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button changeFoldersButton;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
 }
 

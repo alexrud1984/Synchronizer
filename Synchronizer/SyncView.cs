@@ -128,16 +128,16 @@ namespace Synchronizer
             }
         }
 
-        public int FileTypeSelected
+        public string FileTypeSelected
         {
             get
             {
-                return fileTypeComboBox.SelectedIndex;
+                return fileTypeComboBox.Text;
             }
 
             set
             {
-                fileTypeComboBox.SelectedIndex=value;
+                fileTypeComboBox.Text=value;
             }
         }
 
@@ -326,6 +326,7 @@ namespace Synchronizer
                 SynchronizeFolders(this);
             }
         }
+
 
         private void OnAutoSyncFoldersOn()
         {
@@ -523,7 +524,6 @@ namespace Synchronizer
                         foreach (ExtendedFileInfo item in filesList)
                         {
                             ListViewItem lvi = new ListViewItem(item.File.Name);
-               //             if (File.Exists(item.File.FullName))
                             {
                                 listToUpdate.SmallImageList.Images.Add(item.File.Name, System.Drawing.Icon.ExtractAssociatedIcon(item.File.FullName));
                             }

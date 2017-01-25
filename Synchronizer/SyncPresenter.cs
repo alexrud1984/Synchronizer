@@ -95,12 +95,12 @@ namespace Synchronizer
 
         public void OpenSession(ISynchView syncView)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void SaveSession(ISynchView syncView)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void ShowHistory(ISynchView syncView)

@@ -46,7 +46,7 @@ namespace Synchronizer
 
         string[] FileTypes { set; }
 
-        int FileTypeSelected { set; get; }
+        string FileTypeSelected { set; get; }
 
         bool FileVersion { set; get; }
 

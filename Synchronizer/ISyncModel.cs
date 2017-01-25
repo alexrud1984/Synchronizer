@@ -27,7 +27,7 @@ namespace Synchronizer
 
         int TargetFilesCount { get; }
 
-        int TypeSelected { set; }
+        string TypeSelected { set; }
 
         List<ExtendedFileInfo> FilteredSourceFileList { get; }
 
