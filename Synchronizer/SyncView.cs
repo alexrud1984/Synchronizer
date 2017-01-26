@@ -501,34 +501,12 @@ namespace Synchronizer
 
                     foreach (ExtendedFileInfo item in filesList)
                     {
-                        ListViewItem lvi = new ListViewItem(item.File.Name);
-                        listToUpdate.SmallImageList.Images.Add(item.File.Name, System.Drawing.Icon.ExtractAssociatedIcon(item.File.FullName));
-                        lvi.SubItems.Add(item.File.Extension);
-                        lvi.SubItems.Add(FileVersionInfo.GetVersionInfo(item.File.FullName).FileVersion);
-                        lvi.SubItems.Add(item.File.LastWriteTime.ToString());
-                        if (item.IsHighlighted)
-                        {
-                            lvi.ForeColor = item.HlColor;
-                        }
-                        listToUpdate.Items.Add(lvi);
-                        listToUpdate.Items[listToUpdate.Items.Count - 1].ImageKey = item.File.Name;
-                    }
-                }
-                else
-                {
-                    listToUpdate.Invoke((Action)delegate
-                    {
-                        listToUpdate.Items.Clear();
-                        listToUpdate.SmallImageList.Images.Clear();
-
-                        foreach (ExtendedFileInfo item in filesList)
+                        if (item != null)
                         {
                             ListViewItem lvi = new ListViewItem(item.File.Name);
-                            {
-                                listToUpdate.SmallImageList.Images.Add(item.File.Name, System.Drawing.Icon.ExtractAssociatedIcon(item.File.FullName));
-                            }
+                            listToUpdate.SmallImageList.Images.Add(item.File.Name, System.Drawing.Icon.ExtractAssociatedIcon(item.File.FullName));
                             lvi.SubItems.Add(item.File.Extension);
-                            lvi.SubItems.Add(item.Version);
+                            lvi.SubItems.Add(FileVersionInfo.GetVersionInfo(item.File.FullName).FileVersion);
                             lvi.SubItems.Add(item.File.LastWriteTime.ToString());
                             if (item.IsHighlighted)
                             {
@@ -537,8 +515,40 @@ namespace Synchronizer
                             listToUpdate.Items.Add(lvi);
                             listToUpdate.Items[listToUpdate.Items.Count - 1].ImageKey = item.File.Name;
                         }
-                    });
+                        else
+                        {
+                            ListViewItem lvi = new ListViewItem(" ");
+                            listToUpdate.Items.Add(lvi);
+                        }
+                    }
+                }
+                else
+                {
+                    listToUpdate.Items.Clear();
+                    listToUpdate.SmallImageList.Images.Clear();
 
+                    foreach (ExtendedFileInfo item in filesList)
+                    {
+                        if (item != null)
+                        {
+                            ListViewItem lvi = new ListViewItem(item.File.Name);
+                            listToUpdate.SmallImageList.Images.Add(item.File.Name, System.Drawing.Icon.ExtractAssociatedIcon(item.File.FullName));
+                            lvi.SubItems.Add(item.File.Extension);
+                            lvi.SubItems.Add(FileVersionInfo.GetVersionInfo(item.File.FullName).FileVersion);
+                            lvi.SubItems.Add(item.File.LastWriteTime.ToString());
+                            if (item.IsHighlighted)
+                            {
+                                lvi.ForeColor = item.HlColor;
+                            }
+                            listToUpdate.Items.Add(lvi);
+                            listToUpdate.Items[listToUpdate.Items.Count - 1].ImageKey = item.File.Name;
+                        }
+                        else
+                        {
+                            ListViewItem lvi = new ListViewItem(" ");
+                            listToUpdate.Items.Add(lvi);
+                        }
+                    }
                 }
             }
             catch (Exception)
