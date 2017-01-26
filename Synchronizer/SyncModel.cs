@@ -487,35 +487,34 @@ namespace Synchronizer
             {
                 return;
             }
+            //Source files list update
+
+            if (SourceFilesCount == Directory.GetFiles(sourceFolder).Count())
+            {
+                return;
+            }
+            bool isFolderStillUpdating = true;
+
+            //wait if files list in folder still updating
+            do
+            {
+                FilesListInit(sourceFilesList, filteredSourceFileList, sourceFolder);
+                Thread.Sleep(2000);
+                if (SourceFilesCount == Directory.GetFiles(sourceFolder).Count())
+                {
+                    isFolderStillUpdating = false;
+                }
+            }
+            while (isFolderStillUpdating);
+
             //Autosynchronization if it is On
             if (AutoSync)
             {
                 SynchronizeFolders();
+                return;
             }
-            //Source files list update
-            else
-            {
 
-                if (SourceFilesCount == Directory.GetFiles(sourceFolder).Count())
-                {
-                    return;
-                }
-                bool isFolderStillUpdating = true;
-
-                //wait if files list in folder still updating
-                do
-                {
-                    FilesListInit(sourceFilesList, filteredSourceFileList, sourceFolder);
-                    Thread.Sleep(2000);
-                    if (SourceFilesCount == Directory.GetFiles(sourceFolder).Count())
-                    {
-                        isFolderStillUpdating = false;
-                    }
-                }
-                while (isFolderStillUpdating);
-
-                OnFolderUpdated();
-            }
+            OnFolderUpdated();
         }
 
         private void TargetDirectoryWatcher_Updated(object sender, FileSystemEventArgs e)

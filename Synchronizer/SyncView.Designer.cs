@@ -48,7 +48,7 @@ namespace Synchronizer
             this.sourceBrouseButton = new System.Windows.Forms.Button();
             this.sourcePathTextBox = new System.Windows.Forms.TextBox();
             this.changeFoldersButton = new System.Windows.Forms.Button();
-            this.TargetlistView = new System.Windows.Forms.ListView();
+            this.targetListView = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -165,7 +165,7 @@ namespace Synchronizer
             // 
             this.splitContainer1.Panel2.BackColor = System.Drawing.SystemColors.ControlLight;
             this.splitContainer1.Panel2.Controls.Add(this.changeFoldersButton);
-            this.splitContainer1.Panel2.Controls.Add(this.TargetlistView);
+            this.splitContainer1.Panel2.Controls.Add(this.targetListView);
             this.splitContainer1.Panel2.Controls.Add(this.flowLayoutPanel3);
             this.splitContainer1.Panel2.Controls.Add(this.panel3);
             this.splitContainer1.Panel2.RightToLeft = System.Windows.Forms.RightToLeft.No;
@@ -273,23 +273,23 @@ namespace Synchronizer
             // 
             // TargetlistView
             // 
-            this.TargetlistView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.targetListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.TargetlistView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.targetListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2,
             this.columnHeader3,
             this.columnHeader4});
-            this.TargetlistView.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
+            this.targetListView.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
             listViewItem1});
-            this.TargetlistView.Location = new System.Drawing.Point(3, 30);
-            this.TargetlistView.Name = "TargetlistView";
-            this.TargetlistView.Size = new System.Drawing.Size(565, 355);
-            this.TargetlistView.SmallImageList = this.targetImageList;
-            this.TargetlistView.TabIndex = 6;
-            this.TargetlistView.UseCompatibleStateImageBehavior = false;
-            this.TargetlistView.View = System.Windows.Forms.View.Details;
+            this.targetListView.Location = new System.Drawing.Point(3, 30);
+            this.targetListView.Name = "TargetlistView";
+            this.targetListView.Size = new System.Drawing.Size(565, 355);
+            this.targetListView.SmallImageList = this.targetImageList;
+            this.targetListView.TabIndex = 6;
+            this.targetListView.UseCompatibleStateImageBehavior = false;
+            this.targetListView.View = System.Windows.Forms.View.Details;
             // 
             // columnHeader1
             // 
@@ -663,7 +663,7 @@ namespace Synchronizer
         private System.Windows.Forms.Button sourceBrouseButton;
         private System.Windows.Forms.TextBox sourcePathTextBox;
         private System.Windows.Forms.ComboBox fileTypeComboBox;
-        private System.Windows.Forms.ListView TargetlistView;
+        private System.Windows.Forms.ListView targetListView;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader3;

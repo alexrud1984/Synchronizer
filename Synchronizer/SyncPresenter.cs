@@ -147,6 +147,7 @@ namespace Synchronizer
             HighlightFilesList(syncModel.FilteredTargetFileList);
             FilesListRefresh();
             syncView.TargetFilesCount = syncModel.FilteredTargetFileList.Count;
+            syncView.SourceFilesCount = syncModel.FilteredTargetFileList.Count;
 
             syncView.Messanger("Folders successfully synchronized");
             syncView.SyncButtonEnable = true;

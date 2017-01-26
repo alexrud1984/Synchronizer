@@ -113,7 +113,17 @@ namespace Synchronizer
             set
             {
                 IsViewUpdating = true;
-                listViewUpdate(value, sourceListView);
+                if (!sourceListView.InvokeRequired)
+                {
+                    listViewUpdate(value, sourceListView);
+                }
+                else
+                {
+                    srcFilesCountLabel.Invoke((Action)delegate
+                    {
+                        listViewUpdate(value, sourceListView);
+                    });
+                }
                 IsViewUpdating = false;
             }
         }
@@ -122,7 +132,19 @@ namespace Synchronizer
         {
             set
             {
-                listViewUpdate(value, TargetlistView);
+                IsViewUpdating = true;
+                if (!targetListView.InvokeRequired)
+                {
+                    listViewUpdate(value, targetListView);
+                }
+                else
+                {
+                    srcFilesCountLabel.Invoke((Action)delegate
+                    {
+                        listViewUpdate(value, targetListView);
+                    });
+                }
+                IsViewUpdating = false;
             }
         }
 
@@ -494,66 +516,35 @@ namespace Synchronizer
         {
             try
             {
-                if (!listToUpdate.InvokeRequired)
-                {
-                    listToUpdate.Items.Clear();
-                    listToUpdate.SmallImageList.Images.Clear();
+                listToUpdate.Items.Clear();
+                listToUpdate.SmallImageList.Images.Clear();
 
-                    foreach (ExtendedFileInfo item in filesList)
+                foreach (ExtendedFileInfo item in filesList)
+                {
+                    if (item != null)
                     {
-                        if (item != null)
+                        ListViewItem lvi = new ListViewItem(item.File.Name);
+                        listToUpdate.SmallImageList.Images.Add(item.File.Name, System.Drawing.Icon.ExtractAssociatedIcon(item.File.FullName));
+                        lvi.SubItems.Add(item.File.Extension);
+                        lvi.SubItems.Add(FileVersionInfo.GetVersionInfo(item.File.FullName).FileVersion);
+                        lvi.SubItems.Add(item.File.LastWriteTime.ToString());
+                        if (item.IsHighlighted)
                         {
-                            ListViewItem lvi = new ListViewItem(item.File.Name);
-                            listToUpdate.SmallImageList.Images.Add(item.File.Name, System.Drawing.Icon.ExtractAssociatedIcon(item.File.FullName));
-                            lvi.SubItems.Add(item.File.Extension);
-                            lvi.SubItems.Add(FileVersionInfo.GetVersionInfo(item.File.FullName).FileVersion);
-                            lvi.SubItems.Add(item.File.LastWriteTime.ToString());
-                            if (item.IsHighlighted)
-                            {
-                                lvi.ForeColor = item.HlColor;
-                            }
-                            listToUpdate.Items.Add(lvi);
-                            listToUpdate.Items[listToUpdate.Items.Count - 1].ImageKey = item.File.Name;
+                            lvi.ForeColor = item.HlColor;
                         }
-                        else
-                        {
-                            ListViewItem lvi = new ListViewItem(" ");
-                            listToUpdate.Items.Add(lvi);
-                        }
+                        listToUpdate.Items.Add(lvi);
+                        listToUpdate.Items[listToUpdate.Items.Count - 1].ImageKey = item.File.Name;
                     }
-                }
-                else
-                {
-                    listToUpdate.Items.Clear();
-                    listToUpdate.SmallImageList.Images.Clear();
-
-                    foreach (ExtendedFileInfo item in filesList)
+                    else
                     {
-                        if (item != null)
-                        {
-                            ListViewItem lvi = new ListViewItem(item.File.Name);
-                            listToUpdate.SmallImageList.Images.Add(item.File.Name, System.Drawing.Icon.ExtractAssociatedIcon(item.File.FullName));
-                            lvi.SubItems.Add(item.File.Extension);
-                            lvi.SubItems.Add(FileVersionInfo.GetVersionInfo(item.File.FullName).FileVersion);
-                            lvi.SubItems.Add(item.File.LastWriteTime.ToString());
-                            if (item.IsHighlighted)
-                            {
-                                lvi.ForeColor = item.HlColor;
-                            }
-                            listToUpdate.Items.Add(lvi);
-                            listToUpdate.Items[listToUpdate.Items.Count - 1].ImageKey = item.File.Name;
-                        }
-                        else
-                        {
-                            ListViewItem lvi = new ListViewItem(" ");
-                            listToUpdate.Items.Add(lvi);
-                        }
+                        ListViewItem lvi = new ListViewItem(" ");
+                        listToUpdate.Items.Add(lvi);
                     }
                 }
             }
             catch (Exception)
             {
-                Messanger("Someshing went wong! Try again.");
+                Messanger("Someshing went wong! Press refresh.");
             }
 
         }
