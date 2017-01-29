@@ -7,3 +7,12 @@ D:\Projects\Synchronizer\Synchronizer\obj\Debug\Synchronizer.csproj.GenerateReso
 D:\Projects\Synchronizer\Synchronizer\obj\Debug\Synchronizer.exe
 D:\Projects\Synchronizer\Synchronizer\obj\Debug\Synchronizer.pdb
 D:\Projects\Synchronizer\Synchronizer\obj\Debug\Synchronizer.SyncView.resources
+C:\Users\oleksiir\Downloads\Synchronizer\Synchronizer\Synchronizer\bin\Debug\Synchronizer.exe.config
+C:\Users\oleksiir\Downloads\Synchronizer\Synchronizer\Synchronizer\obj\Debug\Synchronizer.exe
+C:\Users\oleksiir\Downloads\Synchronizer\Synchronizer\Synchronizer\obj\Debug\Synchronizer.pdb
+C:\Users\oleksiir\Downloads\Synchronizer\Synchronizer\Synchronizer\bin\Debug\Synchronizer.exe
+C:\Users\oleksiir\Downloads\Synchronizer\Synchronizer\Synchronizer\bin\Debug\Synchronizer.pdb
+C:\Users\oleksiir\Downloads\Synchronizer\Synchronizer\Synchronizer\obj\Debug\Synchronizer.csprojResolveAssemblyReference.cache
+C:\Users\oleksiir\Downloads\Synchronizer\Synchronizer\Synchronizer\obj\Debug\Synchronizer.SyncView.resources
+C:\Users\oleksiir\Downloads\Synchronizer\Synchronizer\Synchronizer\obj\Debug\Synchronizer.Properties.Resources.resources
+C:\Users\oleksiir\Downloads\Synchronizer\Synchronizer\Synchronizer\obj\Debug\Synchronizer.csproj.GenerateResource.Cache

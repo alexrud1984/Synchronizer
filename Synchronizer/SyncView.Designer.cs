@@ -84,6 +84,10 @@ namespace Synchronizer
             this.synchButton = new System.Windows.Forms.Button();
             this.infoLable = new System.Windows.Forms.Label();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.sizeCheckbox = new System.Windows.Forms.CheckBox();
+            this.autoRenameCheckBox = new System.Windows.Forms.CheckBox();
+            this.sizeFile = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -107,7 +111,8 @@ namespace Synchronizer
             this.fileName,
             this.fileType,
             this.fileVersion,
-            this.lastChange});
+            this.lastChange,
+            this.sizeFile});
             this.sourceListView.Location = new System.Drawing.Point(6, 30);
             this.sourceListView.Name = "sourceListView";
             this.sourceListView.Size = new System.Drawing.Size(567, 355);
@@ -120,22 +125,22 @@ namespace Synchronizer
             // fileName
             // 
             this.fileName.Text = "File Name";
-            this.fileName.Width = 341;
+            this.fileName.Width = 270;
             // 
             // fileType
             // 
             this.fileType.Text = "File Type";
-            this.fileType.Width = 67;
+            this.fileType.Width = 57;
             // 
             // fileVersion
             // 
             this.fileVersion.Text = "File Version";
-            this.fileVersion.Width = 81;
+            this.fileVersion.Width = 67;
             // 
             // lastChange
             // 
             this.lastChange.Text = "Last Change";
-            this.lastChange.Width = 79;
+            this.lastChange.Width = 108;
             // 
             // sourceImageList
             // 
@@ -271,7 +276,7 @@ namespace Synchronizer
             this.changeFoldersButton.UseVisualStyleBackColor = true;
             this.changeFoldersButton.Click += new System.EventHandler(this.changeFoldersButton_Click);
             // 
-            // TargetlistView
+            // targetListView
             // 
             this.targetListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
@@ -280,11 +285,12 @@ namespace Synchronizer
             this.columnHeader1,
             this.columnHeader2,
             this.columnHeader3,
-            this.columnHeader4});
+            this.columnHeader4,
+            this.columnHeader5});
             this.targetListView.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
             listViewItem1});
             this.targetListView.Location = new System.Drawing.Point(3, 30);
-            this.targetListView.Name = "TargetlistView";
+            this.targetListView.Name = "targetListView";
             this.targetListView.Size = new System.Drawing.Size(565, 355);
             this.targetListView.SmallImageList = this.targetImageList;
             this.targetListView.TabIndex = 6;
@@ -294,22 +300,22 @@ namespace Synchronizer
             // columnHeader1
             // 
             this.columnHeader1.Text = "File Name";
-            this.columnHeader1.Width = 341;
+            this.columnHeader1.Width = 286;
             // 
             // columnHeader2
             // 
             this.columnHeader2.Text = "File Type";
-            this.columnHeader2.Width = 67;
+            this.columnHeader2.Width = 56;
             // 
             // columnHeader3
             // 
             this.columnHeader3.Text = "File Version";
-            this.columnHeader3.Width = 81;
+            this.columnHeader3.Width = 68;
             // 
             // columnHeader4
             // 
             this.columnHeader4.Text = "Last Change";
-            this.columnHeader4.Width = 79;
+            this.columnHeader4.Width = 97;
             // 
             // targetImageList
             // 
@@ -522,7 +528,9 @@ namespace Synchronizer
             this.flowLayoutPanel2.BackColor = System.Drawing.SystemColors.ControlLight;
             this.flowLayoutPanel2.Controls.Add(this.fileVersionCheckBox);
             this.flowLayoutPanel2.Controls.Add(this.lastChangeCheckBox);
+            this.flowLayoutPanel2.Controls.Add(this.sizeCheckbox);
             this.flowLayoutPanel2.Controls.Add(this.addMissedCheckBox);
+            this.flowLayoutPanel2.Controls.Add(this.autoRenameCheckBox);
             this.flowLayoutPanel2.Controls.Add(this.subfoldersCheckBox);
             this.flowLayoutPanel2.Controls.Add(this.compareButton);
             this.flowLayoutPanel2.Controls.Add(this.synchButton);
@@ -542,6 +550,7 @@ namespace Synchronizer
             this.fileVersionCheckBox.TabIndex = 0;
             this.fileVersionCheckBox.Text = "File Version";
             this.fileVersionCheckBox.UseVisualStyleBackColor = true;
+            this.fileVersionCheckBox.CheckedChanged += new System.EventHandler(this.fileVersionCheckBox_CheckedChanged);
             // 
             // lastChangeCheckBox
             // 
@@ -553,33 +562,36 @@ namespace Synchronizer
             this.lastChangeCheckBox.TabIndex = 1;
             this.lastChangeCheckBox.Text = "Last Change";
             this.lastChangeCheckBox.UseVisualStyleBackColor = true;
+            this.lastChangeCheckBox.CheckedChanged += new System.EventHandler(this.lastChangeCheckBox_CheckedChanged);
             // 
             // addMissedCheckBox
             // 
             this.addMissedCheckBox.AutoSize = true;
-            this.addMissedCheckBox.Location = new System.Drawing.Point(181, 5);
+            this.addMissedCheckBox.Location = new System.Drawing.Point(233, 5);
             this.addMissedCheckBox.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
             this.addMissedCheckBox.Name = "addMissedCheckBox";
             this.addMissedCheckBox.Size = new System.Drawing.Size(105, 17);
             this.addMissedCheckBox.TabIndex = 2;
             this.addMissedCheckBox.Text = "Add Missed Files";
             this.addMissedCheckBox.UseVisualStyleBackColor = true;
+            this.addMissedCheckBox.CheckedChanged += new System.EventHandler(this.addMissedCheckBox_CheckedChanged);
             // 
             // subfoldersCheckBox
             // 
             this.subfoldersCheckBox.AutoSize = true;
-            this.subfoldersCheckBox.Location = new System.Drawing.Point(292, 5);
+            this.subfoldersCheckBox.Location = new System.Drawing.Point(433, 5);
             this.subfoldersCheckBox.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
             this.subfoldersCheckBox.Name = "subfoldersCheckBox";
             this.subfoldersCheckBox.Size = new System.Drawing.Size(114, 17);
             this.subfoldersCheckBox.TabIndex = 4;
             this.subfoldersCheckBox.Text = "Include Subfolders";
             this.subfoldersCheckBox.UseVisualStyleBackColor = true;
+            this.subfoldersCheckBox.CheckedChanged += new System.EventHandler(this.subfoldersCheckBox_CheckedChanged);
             // 
             // compareButton
             // 
             this.compareButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.compareButton.Location = new System.Drawing.Point(412, 0);
+            this.compareButton.Location = new System.Drawing.Point(553, 0);
             this.compareButton.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
             this.compareButton.Name = "compareButton";
             this.compareButton.Size = new System.Drawing.Size(89, 26);
@@ -591,7 +603,7 @@ namespace Synchronizer
             // synchButton
             // 
             this.synchButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.synchButton.Location = new System.Drawing.Point(507, 0);
+            this.synchButton.Location = new System.Drawing.Point(648, 0);
             this.synchButton.Margin = new System.Windows.Forms.Padding(3, 0, 3, 3);
             this.synchButton.Name = "synchButton";
             this.synchButton.Size = new System.Drawing.Size(89, 26);
@@ -605,11 +617,43 @@ namespace Synchronizer
             this.infoLable.AutoSize = true;
             this.infoLable.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.infoLable.ForeColor = System.Drawing.Color.Red;
-            this.infoLable.Location = new System.Drawing.Point(602, 6);
+            this.infoLable.Location = new System.Drawing.Point(743, 6);
             this.infoLable.Margin = new System.Windows.Forms.Padding(3, 6, 3, 0);
             this.infoLable.Name = "infoLable";
             this.infoLable.Size = new System.Drawing.Size(0, 13);
             this.infoLable.TabIndex = 6;
+            // 
+            // sizeCheckbox
+            // 
+            this.sizeCheckbox.AutoSize = true;
+            this.sizeCheckbox.Location = new System.Drawing.Point(181, 5);
+            this.sizeCheckbox.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
+            this.sizeCheckbox.Name = "sizeCheckbox";
+            this.sizeCheckbox.Size = new System.Drawing.Size(46, 17);
+            this.sizeCheckbox.TabIndex = 7;
+            this.sizeCheckbox.Text = "Size";
+            this.sizeCheckbox.UseVisualStyleBackColor = true;
+            this.sizeCheckbox.CheckedChanged += new System.EventHandler(this.sizeCheckbox_CheckedChanged);
+            // 
+            // autoRenameCheckBox
+            // 
+            this.autoRenameCheckBox.AutoSize = true;
+            this.autoRenameCheckBox.Location = new System.Drawing.Point(344, 5);
+            this.autoRenameCheckBox.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
+            this.autoRenameCheckBox.Name = "autoRenameCheckBox";
+            this.autoRenameCheckBox.Size = new System.Drawing.Size(83, 17);
+            this.autoRenameCheckBox.TabIndex = 8;
+            this.autoRenameCheckBox.Text = "Autorename";
+            this.autoRenameCheckBox.UseVisualStyleBackColor = true;
+            this.autoRenameCheckBox.CheckedChanged += new System.EventHandler(this.autoRenameCheckBox_CheckedChanged);
+            // 
+            // sizeFile
+            // 
+            this.sizeFile.Text = "Size";
+            // 
+            // columnHeader5
+            // 
+            this.columnHeader5.Text = "Size";
             // 
             // SyncView
             // 
@@ -704,6 +748,10 @@ namespace Synchronizer
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button changeFoldersButton;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.Windows.Forms.CheckBox sizeCheckbox;
+        private System.Windows.Forms.CheckBox autoRenameCheckBox;
+        private System.Windows.Forms.ColumnHeader sizeFile;
+        private System.Windows.Forms.ColumnHeader columnHeader5;
     }
 }
 

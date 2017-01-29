@@ -32,11 +32,18 @@ namespace Synchronizer
 
     public delegate void ChangeFoldersEventHandler(ISynchView sender);
 
+    public delegate void IncludeSubfoldersEventHandler(ISynchView sender);
+
+    public delegate void ChangeBasParamEventHandler(ISynchView sender);
+
+
 
 
     public interface ISynchView
     {
         string InfoLable { set; get; }
+
+        string Autosynch { set; get; }
 
         bool IsViewUpdating { get; }
 
@@ -59,6 +66,10 @@ namespace Synchronizer
         bool CompareButtonEnable { set; get; }
 
         bool SyncButtonEnable { set; get; }
+
+        bool Size { set; get; }
+
+        bool AutoRename { set; get; }
 
         string OperateSessionId { set; get; }
 
@@ -99,5 +110,10 @@ namespace Synchronizer
         event FileTypeSelectEventHandler FileTypeSelect;
 
         event ChangeFoldersEventHandler ChangeFolders;
+
+        event IncludeSubfoldersEventHandler IncludeSubfoldersEv;
+
+        event ChangeBasParamEventHandler ChangeBasParam;
+
     }
 }

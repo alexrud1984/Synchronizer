@@ -18,6 +18,7 @@ namespace Synchronizer
         ErrorProvider error;
         FolderBrowserDialog fbd = new FolderBrowserDialog();
 
+
         public string Source
         {
             get
@@ -48,9 +49,21 @@ namespace Synchronizer
         {
              set
             {
-                fileTypeComboBox.Items.Clear();
-                fileTypeComboBox.Items.AddRange (value);
-                fileTypeComboBox.SelectedItem = fileTypeComboBox.Items[0];
+                if (!fileTypeComboBox.InvokeRequired)
+                {
+                    fileTypeComboBox.Items.Clear();
+                    fileTypeComboBox.Items.AddRange(value);
+                    fileTypeComboBox.SelectedItem = fileTypeComboBox.Items[0];
+                }
+                else
+                {
+                    fileTypeComboBox.Invoke((Action)delegate
+                    {
+                        fileTypeComboBox.Items.Clear();
+                        fileTypeComboBox.Items.AddRange(value);
+                        fileTypeComboBox.SelectedItem = fileTypeComboBox.Items[0];
+                    });
+                }
             }
         }
 
@@ -256,6 +269,45 @@ namespace Synchronizer
             }
         }
 
+        public string Autosynch
+        {
+            get
+            {
+                return autosyncStateLabel.Text;
+            }
+
+            set
+            {
+                autosyncStateLabel.Text=value;
+            }
+        }
+
+        public bool AutoRename
+        {
+            get
+            {
+                return autoRenameCheckBox.Checked;
+            }
+
+            set
+            {
+                autoRenameCheckBox.Checked=value;
+            }
+        }
+
+        bool ISynchView.Size
+        {
+            get
+            {
+                return sizeCheckbox.Checked;
+            }
+
+            set
+            {
+                sizeCheckbox.Checked = value;
+            }
+        }
+
         public SyncView()
         {
             InitializeComponent();
@@ -275,6 +327,8 @@ namespace Synchronizer
         public event TargetPathSelectedEventHandler TargetPathSelected;
         public event FileTypeSelectEventHandler FileTypeSelect;
         public event ChangeFoldersEventHandler ChangeFolders;
+        public event IncludeSubfoldersEventHandler IncludeSubfoldersEv;
+        public event ChangeBasParamEventHandler ChangeBasParam;
 
         private void sourceBrouseButton_Click(object sender, EventArgs e)
         {
@@ -405,6 +459,14 @@ namespace Synchronizer
             }
         }
 
+        private void OnChangeBasParam()
+        {
+            if (ChangeBasParam != null)
+            {
+                ChangeBasParam(this);
+            }
+        }
+
         private void OnSourcePathSelected()
         {
             if (SourcePathSelected != null)
@@ -434,6 +496,14 @@ namespace Synchronizer
             if (ChangeFolders != null)
             {
                 ChangeFolders(this);
+            }
+        }
+
+        private void OnIncludeSubfolders()
+        {
+            if (IncludeSubfoldersEv != null)
+            {
+                IncludeSubfoldersEv(this);
             }
         }
 
@@ -496,14 +566,12 @@ namespace Synchronizer
         {
             if (IsDataValid())
             {
-                autosyncStateLabel.Text = "On";
                 OnAutoSyncFoldersOn();
             }
         }
 
         private void offToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
-            autosyncStateLabel.Text = "Off";
             OnAutoSyncFoldersOff();
         }
 
@@ -518,22 +586,32 @@ namespace Synchronizer
             {
                 listToUpdate.Items.Clear();
                 listToUpdate.SmallImageList.Images.Clear();
+                string name;
 
                 foreach (ExtendedFileInfo item in filesList)
                 {
                     if (item != null)
                     {
-                        ListViewItem lvi = new ListViewItem(item.File.Name);
-                        listToUpdate.SmallImageList.Images.Add(item.File.Name, System.Drawing.Icon.ExtractAssociatedIcon(item.File.FullName));
+                        if (IncludeSubfolders)
+                        {
+                            name = item.NoPathFullName;
+                        }
+                        else
+                        {
+                            name = item.File.Name;
+                        }
+                        ListViewItem lvi = new ListViewItem(name);
+                        listToUpdate.SmallImageList.Images.Add(name, System.Drawing.Icon.ExtractAssociatedIcon(item.File.FullName));
                         lvi.SubItems.Add(item.File.Extension);
                         lvi.SubItems.Add(FileVersionInfo.GetVersionInfo(item.File.FullName).FileVersion);
                         lvi.SubItems.Add(item.File.LastWriteTime.ToString());
+                        lvi.SubItems.Add(Math.Round(item.Size / 1024, 0).ToString() + " " + "Kb");
                         if (item.IsHighlighted)
                         {
                             lvi.ForeColor = item.HlColor;
                         }
                         listToUpdate.Items.Add(lvi);
-                        listToUpdate.Items[listToUpdate.Items.Count - 1].ImageKey = item.File.Name;
+                        listToUpdate.Items[listToUpdate.Items.Count - 1].ImageKey = name;
                     }
                     else
                     {
@@ -552,6 +630,39 @@ namespace Synchronizer
         private void changeFoldersButton_Click(object sender, EventArgs e)
         {
             OnChangeFolders();
+        }
+
+        private void subfoldersCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            OnIncludeSubfolders();
+        }
+
+        private void fileVersionCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            OnChangeBasParam();
+        }
+
+        private void lastChangeCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            OnChangeBasParam();
+
+        }
+
+        private void sizeCheckbox_CheckedChanged(object sender, EventArgs e)
+        {
+            OnChangeBasParam();
+
+        }
+
+        private void addMissedCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            OnChangeBasParam();
+
+        }
+
+        private void autoRenameCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            OnChangeBasParam();
         }
     }
 }

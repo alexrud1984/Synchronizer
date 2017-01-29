@@ -14,12 +14,16 @@ namespace Synchronizer
 
     public delegate void FolderUpdatedEventHandler(ISyncModel sender);
 
+    public delegate void ListUpdatedEventHandler(ISyncModel sender);
+
+    public delegate void ExceptionMessageEventHandler(string msg);
+
     
     public interface ISyncModel
     {
-        string SourceFolder { set; }
+        string SourceFolder { set; get; }
 
-        string TargetFolder { set; }
+        string TargetFolder { set; get; }
 
         string [] FileTypes { get; }
 
@@ -37,9 +41,15 @@ namespace Synchronizer
 
         bool LastChange { set; get; }
 
+        bool Autorename { set; get; }
+
         bool AddMissedFile { set; get; }
 
         bool AutoSync { set; get; }
+
+        bool Size { set; get; }
+
+        bool IncludeSubfolders { set; }
 
         void CompareFolders();
 
@@ -52,6 +62,10 @@ namespace Synchronizer
         event FoldersSynchronizedEventHandler FoldersSynchronized;
 
         event FolderUpdatedEventHandler FolderUpdated;
+
+        event ListUpdatedEventHandler ListUpdated;
+
+        event ExceptionMessageEventHandler ExceptionMessage;
 
     }
 }

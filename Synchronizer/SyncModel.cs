@@ -18,6 +18,8 @@ namespace Synchronizer
         private FileSystemWatcher targetDirectoryWatcher;
         private string[] fileTypes;
         private bool isSynchronizing;
+        private bool includeSubfolders;
+        private bool isCompared;
 
 
         private List<ExtendedFileInfo> sourceFilesList;
@@ -62,26 +64,43 @@ namespace Synchronizer
             {
                 if (!String.IsNullOrEmpty(value))
                 {
+                    //clean compare data if folder is new
+                    if (!String.Equals(sourceFolder, value)) 
+                    {
+                        CleanCompareData();
+                        isCompared = false;
+                    }
+
                     SourceWindowsEventsDetach();
                     sourceFolder = value;
-                    FilesListInit (sourceFilesList, filteredSourceFileList, sourceFolder);
-                    FileTypesFilling();
+                    sourceFilesList.Clear();
                     SourceWindowsEventsAttach();
+                    if (includeSubfolders)
+                    {
+                        IncludeSubfolders = includeSubfolders;
+                    }
+                    else
+                    {
+                        FilesListInit(sourceFilesList, filteredSourceFileList, sourceFolder);
+                    }
+                    OnListUpdated();
                 }
                 else
                 {
                     sourceFolder = String.Empty;
                     sourceFilesList.Clear();
+                    CleanCompareData();
+                    isCompared = false;
                     filteredSourceFileList.Clear();
                     if (TargetFilesCount == 0)
                     {
                         fileTypes = new string[] { "*" };
+                        TypeSelected = "*";
                     }
-                    typeSelected = "*";
                     SourceWindowsEventsDetach();
                 }
             }
-            private get
+            get
             {
                 return sourceFolder;
             }
@@ -94,23 +113,39 @@ namespace Synchronizer
             {
                 if (!String.IsNullOrEmpty(value))
                 {
-                    TargetwindowsEventsDetach();
+                    //clean compare data if folder is new
+                    if (!String.Equals(targetFolder, value))
+                    {
+                        CleanCompareData();
+                        isCompared = false;
+                    }
+                    TargetWindowsEventsDetach();
                     targetFolder = value;
-                    FilesListInit(targetFilesList, filteredTargetFileList, targetFolder);
-                    FileTypesFilling();
-                    TargetwindowsEventsAttach();
+                    targetFilesList.Clear();
+                    TargetWindowsEventsAttach();
+                    if (includeSubfolders)
+                    {
+                        IncludeSubfolders = includeSubfolders;
+                    }
+                    else
+                    {
+                        FilesListInit(targetFilesList, filteredTargetFileList, targetFolder);
+                    }
+                    OnListUpdated();
                 }
                 else
                 {
                     targetFolder = String.Empty;
                     targetFilesList.Clear();
                     filteredTargetFileList.Clear();
+                    CleanCompareData();
+                    isCompared = false;
                     if (SourceFilesCount == 0)
                     {
                         fileTypes = new string[] { "*" };
+                        typeSelected = "*";
                     }
-                    typeSelected = "*";
-                    TargetwindowsEventsDetach();
+                    TargetWindowsEventsDetach();
                 }
             }
 
@@ -126,8 +161,8 @@ namespace Synchronizer
             set
             {
                 typeSelected = value;
-                filterFileList(typeSelected, sourceFilesList, filteredSourceFileList);
-                filterFileList(typeSelected, targetFilesList, filteredTargetFileList);
+                FilterFileList(typeSelected, sourceFilesList, filteredSourceFileList);
+                FilterFileList(typeSelected, targetFilesList, filteredTargetFileList);
                 OnFoldersFiltered();
             }
 
@@ -159,6 +194,50 @@ namespace Synchronizer
 
         public bool AddMissedFile { set; get; }
 
+        public bool Autorename { set; get; }
+
+        public bool IncludeSubfolders
+        {
+            set
+            {
+                includeSubfolders = value;
+                if (includeSubfolders)
+                {
+                    if (!String.IsNullOrEmpty(sourceFolder))
+                    {
+                        sourceFilesList.Clear();
+                        FilesListInitTree(sourceFilesList, sourceFolder, sourceFolder);
+                        sourceDirectoryWatcher.IncludeSubdirectories = true;
+                    }
+
+                    if (!String.IsNullOrEmpty(targetFolder))
+                    {
+                        targetFilesList.Clear();
+                        FilesListInitTree(targetFilesList, targetFolder, targetFolder);
+                        targetDirectoryWatcher.IncludeSubdirectories = true;
+                    }
+
+                    if (isCompared)
+                    {
+                        CompareAccorrdingToSettings();
+                    }
+
+                    FileTypesFilling();
+                    FilterFileList(typeSelected, sourceFilesList, filteredSourceFileList);
+                    FilterFileList(typeSelected, targetFilesList, filteredTargetFileList);
+                    OnListUpdated();
+
+                }
+                else
+                {
+                    sourceDirectoryWatcher.IncludeSubdirectories = false;
+                    targetDirectoryWatcher.IncludeSubdirectories = false;
+                    SourceFolder = sourceFolder;
+                    TargetFolder = targetFolder;
+                }
+            }
+        }
+
         public int SourceFilesCount
         {
             get
@@ -175,6 +254,8 @@ namespace Synchronizer
             }
         }
 
+        public bool Size { set; get; }
+
         public SyncModel()
         {
             fileTypes = new string[] { "*" };
@@ -190,12 +271,14 @@ namespace Synchronizer
         public event FoldersComparedEventHandler FoldersCompared;
         public event FoldersSynchronizedEventHandler FoldersSynchronized;
         public event FolderUpdatedEventHandler FolderUpdated;
+        public event ListUpdatedEventHandler ListUpdated;
+        public event ExceptionMessageEventHandler ExceptionMessage;
 
         public void CompareFolders()
         {
-            CompareAccorrdingSettings();
-            filterFileList(typeSelected, sourceFilesList, filteredSourceFileList);
-            filterFileList(typeSelected, targetFilesList, filteredTargetFileList);
+            CleanCompareData();
+            CompareAccorrdingToSettings();
+            isCompared = true;
             OnFoldersCompared();
         }
 
@@ -205,36 +288,68 @@ namespace Synchronizer
             sourceDirectoryWatcher.EnableRaisingEvents = false;
             isSynchronizing = true;
 
-            CompareAccorrdingSettings();
+            //subfolders synch
+            if (includeSubfolders)
+            {
+                FoldersTreeAlign(sourceFolder, targetFolder);
+            }
+            CleanCompareData();
+            CompareAccorrdingToSettings();
             foreach (var itemS in filteredSourceFileList)
             {
                 if (AddMissedFile && !itemS.IsExists)
                 {
-                    itemS.File.CopyTo(Path.Combine(TargetFolder,itemS.File.Name));
+                    itemS.File.CopyTo(Path.Combine(TargetFolder,itemS.NoPathFullName));
                 }
                 else
                 {
-                    foreach (var itemT in filteredTargetFileList)
+                    if (itemS.IsLastChangeHigh || itemS.IsVersionHigh || itemS.IsSizeDiffer)
                     {
-                        if (itemS.File.Name == itemT.File.Name)
+                        try
                         {
-                            if (itemS.IsLastChangeHigh || itemS.IsVersionHigh)
-                            {
-                                itemS.File.CopyTo(Path.Combine(targetFolder, itemS.File.Name), true);
-                            }
+                            itemS.File.CopyTo(Path.Combine(targetFolder, itemS.NoPathFullName), true);
+                        }
+                        catch (AccessViolationException)
+                        {
+                            OnExceptionMessage("There is no access to the target folder");
+                        }
+                        catch (FileNotFoundException)
+                        {
+                            OnExceptionMessage("File probably been deleted during synchronization");
+                        }
+                        catch (Exception ex)
+                        {
+                            OnExceptionMessage(ex.Message);
                         }
                     }
                 }
             }
-            FilesListInit(targetFilesList, filteredTargetFileList, targetFolder);
+
+            targetFilesList.Clear();
             CleanCompareData();
+
+            if (includeSubfolders)
+            {
+                FilesListInitTree(targetFilesList, targetFolder, targetFolder);
+            }
+            else
+            {
+                FilesListInit(targetFilesList, filteredTargetFileList, targetFolder);  // init builds also filtered list
+            }
+
+            if (isCompared)
+            {
+                CompareAccorrdingToSettings();
+            }
+            FilterFileList(typeSelected, targetFilesList, filteredTargetFileList);
+
             targetDirectoryWatcher.EnableRaisingEvents = true;
             sourceDirectoryWatcher.EnableRaisingEvents = true;
             isSynchronizing = false;
             OnFoldersSynchronized();
         }
 
-        private void filterFileList(string filter, List<ExtendedFileInfo> toFilter, List<ExtendedFileInfo> filtered)
+        private void FilterFileList(string filter, List<ExtendedFileInfo> toFilter, List<ExtendedFileInfo> filtered)
         {
             filtered.Clear();
             foreach (ExtendedFileInfo item in toFilter)
@@ -253,9 +368,10 @@ namespace Synchronizer
                 source[i].IsExists = false;
                 for (int j = 0; j < target.Count; j++)
                 {
-                    if (source[i].File.Name == target[j].File.Name)
+                    if (String.Equals(source[i].NoPathFullName, target[j].NoPathFullName))
                     {
                         source[i].IsExists = true;
+                        source[i].OpponentIndex = j;
                     }
                 }
             }
@@ -265,18 +381,12 @@ namespace Synchronizer
         {
             for (int i = 0; i<source.Count; i++)
             {
-                for (int j = 0; j < target.Count; j++)
+                if (source[i].IsExists)
                 {
-                    if (source[i].IsExists)
+                    source[i].IsVersionHigh = false;
+                    if (String.CompareOrdinal(source[i].Version, target[source[i].OpponentIndex].Version) > 0)
                     {
-                        if (source[i].File.Name == target[j].File.Name)
-                        {
-                            if (String.CompareOrdinal (source[i].Version, target[j].Version)>0)
-                            {
-                                source[i].IsVersionHigh=true;
-                            }
-                            continue;
-                        }
+                        source[i].IsVersionHigh = true;
                     }
                 }
             }
@@ -286,18 +396,25 @@ namespace Synchronizer
         {
             for (int i = 0; i < source.Count; i++)
             {
-                for (int j = 0; j < target.Count; j++)
+                if (source[i].IsExists)
                 {
-                    if (source[i].IsExists)
+                    if (source[i].File.LastWriteTime > target[source[i].OpponentIndex].File.LastWriteTime)
                     {
-                        if (source[i].File.Name == target[j].File.Name)
-                        {
-                            if (source[i].File.LastWriteTime>target[j].File.LastWriteTime)
-                            {
-                                source[i].IsLastChangeHigh = true;
-                            }
-                            continue;
-                        }
+                        source[i].IsLastChangeHigh = true;
+                    }
+                }
+            }
+        }
+
+        private void CompareSize(List<ExtendedFileInfo> source, List<ExtendedFileInfo> target)
+        {
+            for (int i = 0; i < source.Count; i++)
+            {
+                if (source[i].IsExists)
+                {
+                    if (source[i].Size != target[source[i].OpponentIndex].Size)
+                    {
+                        source[i].IsSizeDiffer = true;
                     }
                 }
             }
@@ -335,6 +452,23 @@ namespace Synchronizer
                 FolderUpdated(this);
             }
         }
+
+        private void OnListUpdated()
+        {
+            if (ListUpdated != null)
+            {
+                ListUpdated(this);
+            }
+        }
+
+        private void OnExceptionMessage(string msg)
+        {
+            if (ExceptionMessage != null)
+            {
+                ExceptionMessage(msg);
+            }
+        }
+
         private void CleanCompareData()
         {
             foreach (var item in sourceFilesList)
@@ -349,33 +483,36 @@ namespace Synchronizer
 
         private void FilesListInit ( List<ExtendedFileInfo>  initList, List<ExtendedFileInfo> filteredList, string path)
         {
-            initList.Clear();
-            filteredList.Clear();
-
             try
             {
                 foreach (string item in Directory.GetFiles(path))
                 {
                     if (File.Exists(item))
                     {
-                        ExtendedFileInfo efi = new ExtendedFileInfo(item);
+                        ExtendedFileInfo efi = new ExtendedFileInfo(item, path);
                         initList.Add(efi);
                     }
                 }
                 initList.Sort();
                 FileTypesFilling();
-                filterFileList(typeSelected, initList, filteredList);
+                if (isCompared)
+                {
+                    CompareAccorrdingToSettings();
+                }
+                FilterFileList(typeSelected, initList, filteredList);
             }
             catch (FileNotFoundException)
             {
+                initList.Clear();
                 FilesListInit(initList, filteredList, path);
                 return;
             }
+            initList.Distinct();
         }
 
-        private void CompareAccorrdingSettings()
+        private void CompareAccorrdingToSettings()
         {
-            CleanCompareData();
+
             CheckExist(sourceFilesList, targetFilesList);
             CheckExist(targetFilesList, sourceFilesList);
             if (FileVersion)
@@ -388,25 +525,11 @@ namespace Synchronizer
                 CompareLastChange(sourceFilesList, targetFilesList);
                 CompareLastChange(targetFilesList, sourceFilesList);
             }
-        }
-
-        private long GetDirctorySize(string path)
-        {
-            DirectoryInfo di = new DirectoryInfo(path);
-            long size = 0;
-            FileInfo [] fileList = di.GetFiles();
-            foreach (FileInfo item in fileList)
+            if (Size)
             {
-                try
-                {
-                    size += item.Length;
-                }
-                catch (UnauthorizedAccessException)
-                {
-                    //add to log in future
-                }
+                CompareSize(sourceFilesList, targetFilesList);
+                CompareSize(targetFilesList, sourceFilesList);
             }
-            return size;
         }
 
         private void SourceWindowsEventsAttach()
@@ -419,7 +542,7 @@ namespace Synchronizer
             sourceDirectoryWatcher.Renamed += SourceDirectoryWatcher_Updated;
         }
 
-        private void TargetwindowsEventsAttach()
+        private void TargetWindowsEventsAttach()
         {
             targetDirectoryWatcher.Path=targetFolder;
             targetDirectoryWatcher.EnableRaisingEvents = true;
@@ -442,7 +565,7 @@ namespace Synchronizer
             }
         }
 
-        private void TargetwindowsEventsDetach()
+        private void TargetWindowsEventsDetach()
         {
             if (targetDirectoryWatcher != null)
             {
@@ -483,29 +606,130 @@ namespace Synchronizer
 
         private void SourceDirectoryWatcher_Updated(object sender, FileSystemEventArgs e)
         {
-            if (isSynchronizing)
+            switch (e.ChangeType)
             {
-                return;
-            }
-            //Source files list update
+                case WatcherChangeTypes.Changed:
+                    {
+                        ExtendedFileInfo efi;
+                        try
+                        {
+                            efi = new ExtendedFileInfo(e.FullPath, sourceFolder);
+                        }
+                        catch (FileNotFoundException)
+                        {
+                            return;
+                        }
+                        catch (Exception ex)
+                        {
+                            OnExceptionMessage(ex.Message);
+                            return;
+                        }
+                        for (int i = 0; i<sourceFilesList.Count; i++)
+                        {
+                            if (String.Equals(sourceFilesList[i].FullName, efi.FullName))
+                            {
+                                if (String.Equals(sourceFilesList[i].Version, efi.Version) && String.Equals(sourceFilesList[i].File.LastWriteTime, sourceFilesList[i].File.LastWriteTime) && (sourceFilesList[i].Size == efi.Size))
+                                {
+                                    return;
+                                }
+                                else
+                                {
+                                    sourceFilesList[i] = efi;
+                                }
+                            }
+                        }
+                        break;
+                    }
 
-            if (SourceFilesCount == Directory.GetFiles(sourceFolder).Count())
-            {
-                return;
-            }
-            bool isFolderStillUpdating = true;
+                case WatcherChangeTypes.Renamed:
+                    {
+                        try
+                        {
+                            ExtendedFileInfo efi = new ExtendedFileInfo(e.FullPath, sourceFolder);
+                            string oldFullName = ((System.IO.RenamedEventArgs)e).OldFullPath;
+                            for (int i = 0; i < sourceFilesList.Count; i++)
+                            {
+                                if (String.Equals(oldFullName, sourceFilesList[i].FullName))
+                                {
+                                    sourceFilesList[i] = efi;
+                                    break;
+                                }
+                            }
+                            if (Autorename)
+                            {
+                                if (Directory.Exists(Path.Combine(targetFolder, efi.File.Directory.FullName.Remove(0, sourceFolder.Length + 1))))
+                                {
+                                    string renamedFile = oldFullName.Remove(0, sourceFolder.Length + 1);
+                                    for (int i = 0; i < targetFilesList.Count; i++)
+                                    {
+                                        if (String.Equals(renamedFile, targetFilesList[i].NoPathFullName))
+                                        {
+                                            File.Move(targetFilesList[i].FullName, Path.Combine(TargetFolder, efi.NoPathFullName));
+                                            targetFilesList[i] = new ExtendedFileInfo(Path.Combine(TargetFolder, efi.NoPathFullName), targetFolder);
+                                            targetFilesList.Sort();
+                                            FilterFileList(typeSelected, targetFilesList, filteredTargetFileList);
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                            sourceFilesList.Sort();
+                            FilterFileList(typeSelected, sourceFilesList, filteredSourceFileList);
+                            if (isCompared)
+                            {
+                                CompareAccorrdingToSettings();
+                            }
+                            OnListUpdated();
+                        }
+                        catch(AccessViolationException)
+                        {
+                            OnExceptionMessage("There is no access to the file");
+                        }
+                        catch(Exception ex)
+                        {
+                            OnExceptionMessage(ex.Message);
+                        }
+                        return;
+                    }
+                default:
+                    {
+                        if (SourceFilesCount == GetFilesCountInSub(sourceFolder, 0))
+                        {
+                            return;
+                        }
 
-            //wait if files list in folder still updating
-            do
-            {
-                FilesListInit(sourceFilesList, filteredSourceFileList, sourceFolder);
-                Thread.Sleep(2000);
-                if (SourceFilesCount == Directory.GetFiles(sourceFolder).Count())
-                {
-                    isFolderStillUpdating = false;
-                }
+                        bool isFolderStillUpdating = true;
+
+                        //wait if files list in folder still updating
+                        do
+                        {
+                            sourceFilesList.Clear();
+                            if (includeSubfolders)
+                            {
+                                FilesListInitTree(sourceFilesList, sourceFolder, sourceFolder);
+                            }
+                            else
+                            {
+                                FilesListInit(sourceFilesList, filteredSourceFileList, sourceFolder);
+                            }
+                            Thread.Sleep(2000);
+                            if (SourceFilesCount == GetFilesCountInSub(sourceFolder, 0))
+                            {
+                                isFolderStillUpdating = false;
+                            }
+                        }
+                        while (isFolderStillUpdating);
+                        break;
+                    }
             }
-            while (isFolderStillUpdating);
+
+            if (isCompared)
+            {
+                CompareAccorrdingToSettings();
+            }
+
+            FileTypesFilling();
+            FilterFileList(typeSelected, sourceFilesList, filteredSourceFileList);
 
             //Autosynchronization if it is On
             if (AutoSync)
@@ -513,13 +737,44 @@ namespace Synchronizer
                 SynchronizeFolders();
                 return;
             }
-
+ 
             OnFolderUpdated();
         }
 
         private void TargetDirectoryWatcher_Updated(object sender, FileSystemEventArgs e)
         {
-            if (TargetFilesCount == Directory.GetFiles(targetFolder).Count() || isSynchronizing)
+            if (isSynchronizing)
+            {
+                return;
+            }
+
+            if (e.ChangeType == WatcherChangeTypes.Renamed)
+            {
+                try
+                {
+                    ExtendedFileInfo efi = new ExtendedFileInfo(e.FullPath, sourceFolder);
+                    string oldFullName = ((System.IO.RenamedEventArgs)e).OldFullPath;
+                    for (int i = 0; i < targetFilesList.Count; i++)
+                    {
+                        if (String.Equals(oldFullName, targetFilesList[i].FullName))
+                        {
+                            targetFilesList[i] = efi;
+                            break;
+                        }
+                    }
+                }
+                catch (AccessViolationException)
+                {
+                    OnExceptionMessage("There is no access to the file");
+                }
+                catch (Exception ex)
+                {
+                    OnExceptionMessage(ex.Message);
+                }
+
+            }
+
+            if (TargetFilesCount == GetFilesCountInSub(targetFolder, 0))
             {
                 return;
             }
@@ -528,16 +783,117 @@ namespace Synchronizer
             //wait if files list in folder still updating
             do
             {
-                FilesListInit(targetFilesList, filteredTargetFileList, targetFolder);
+                targetFilesList.Clear();
+                if (includeSubfolders)
+                {
+                    FilesListInitTree(targetFilesList, targetFolder, targetFolder);
+                }
+                else
+                {
+                    FilesListInit(targetFilesList, filteredTargetFileList, targetFolder);
+                }
                 Thread.Sleep(2000);
-                if (TargetFilesCount == Directory.GetFiles(targetFolder).Count())
+                if (TargetFilesCount == GetFilesCountInSub(targetFolder, 0))
                 {
                     isFolderStillUpdating = false;
                 }
             }
             while (isFolderStillUpdating);
 
+            if (isCompared)
+            {
+                CompareAccorrdingToSettings();
+            }
+            FilterFileList(typeSelected, targetFilesList, filteredTargetFileList);
+
             OnFolderUpdated();
+        }
+
+        private void FoldersTreeAlign(string source, string target)
+        {
+            List<DirectoryInfo> sourceDirList = new List<DirectoryInfo>();
+            List<DirectoryInfo> targetDirList = new List<DirectoryInfo>();
+            foreach (var item in Directory.GetDirectories(source))
+            {
+                sourceDirList.Add(new DirectoryInfo(item));
+            }
+            foreach (var item in Directory.GetDirectories(target))
+            {
+                targetDirList.Add(new DirectoryInfo(item));
+            }
+
+            foreach (var itemS in sourceDirList)
+            {
+                bool exists = false;
+                foreach (var itemT in targetDirList)
+                {
+                    if (String.Equals(itemS.Name, itemT.Name))
+                    {
+                        exists = true;
+                        break;
+                    }
+                }
+                if (!exists)
+                {
+                    try
+                    {
+                        Directory.CreateDirectory(Path.Combine(target, itemS.Name));
+                    }
+                    catch(UnauthorizedAccessException)
+                    {
+                        OnExceptionMessage("There is no access to the target folder");
+                    }
+                }
+
+            }
+
+            foreach (var item in sourceDirList)
+            {
+                FoldersTreeAlign(Path.Combine(source, item.Name), Path.Combine(target, item.Name));
+            }
+            return;
+        }
+
+        private void FilesListInitTree( List<ExtendedFileInfo> initList, string currentPath, string parentlPath)
+        {
+            //build file list from currnet folder
+            try
+            {
+                foreach (string fileItem in Directory.GetFiles(currentPath))
+                {
+                    ExtendedFileInfo efi = new ExtendedFileInfo(fileItem, parentlPath);
+                    initList.Add(efi);
+                }
+            }
+            catch(FileNotFoundException)
+            {
+                initList.Clear();
+                FilesListInitTree(initList, parentlPath, parentlPath);
+            }
+
+            //build folders list for current folder and go to each one to get files
+            foreach (var dirItem in Directory.GetDirectories(currentPath))
+            {
+                FilesListInitTree(initList, dirItem, parentlPath);
+            }
+
+        }
+
+        private int GetFilesCountInSub(string path, int count)
+        {
+            foreach (var file in Directory.GetFiles(path))
+            {
+                count++;
+            }
+            if (includeSubfolders)
+            {
+                foreach (var dir in Directory.GetDirectories(path))
+                {
+                    count = (GetFilesCountInSub(dir, count));
+                }
+            }
+
+            return count;
         }
 
     }

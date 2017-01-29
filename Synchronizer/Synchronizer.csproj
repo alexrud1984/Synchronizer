@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExtendedFileInfo.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="SyncModel.cs" />
     <Compile Include="SyncView.cs">
       <SubType>Form</SubType>
