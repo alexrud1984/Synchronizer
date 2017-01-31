@@ -1,0 +1,61 @@
+[31.01.2017 00:04:29.228] Sorce folder D:\test1 seledted
+[31.01.2017 00:04:36.239] Target folder D:\test2 seledted
+[31.01.2017 00:05:15.479] Target folder D:\test2 seledted
+[31.01.2017 00:58:33.995] Sorce folder D:\test1 seledted
+[31.01.2017 00:58:41.380] Target folder D:\test2 seledted
+[31.01.2017 00:59:35.786] [System.String.Remove()] Индекс и показание счетчика должны указывать на позицию в строке.
+Имя параметра: count
+[31.01.2017 00:59:47.212] [System.String.Remove()] Индекс и показание счетчика должны указывать на позицию в строке.
+Имя параметра: count
+[31.01.2017 01:01:10.348] [System.String.Remove()] Индекс и показание счетчика должны указывать на позицию в строке.
+Имя параметра: count
+[31.01.2017 01:04:03.993] [System.String.Remove()] Индекс и показание счетчика должны указывать на позицию в строке.
+Имя параметра: count
+[31.01.2017 01:13:26.167] [System.String.Remove()] Индекс и показание счетчика должны указывать на позицию в строке.
+Имя параметра: count
+[31.01.2017 01:19:06.312] Sorce folder D:\test1 seledted
+[31.01.2017 01:19:13.724] Target folder D:\test2 seledted
+[31.01.2017 01:22:56.111] Sorce folder D:\test1 seledted
+[31.01.2017 01:23:17.833] [System.IO.Path.Combine()] Значение не может быть неопределенным.
+Имя параметра: path1
+[31.01.2017 01:29:14.320] Sorce folder D:\test1 seledted
+[31.01.2017 01:30:22.221] Sorce folder D:\test1 seledted
+[31.01.2017 01:31:25.450] Target folder D:\test2 seledted
+[31.01.2017 01:33:07.854] File D:\test2\4444.png been renamed to D:\test2\4444.png
+[31.01.2017 01:39:03.868] Sorce folder D:\test1 seledted
+[31.01.2017 01:39:09.539] Target folder D:\test2 seledted
+[31.01.2017 01:39:57.970] File D:\test2\5555.png been renamed to D:\test2\5555.png
+[31.01.2017 01:40:55.399] Sorce folder D:\test1 seledted
+[31.01.2017 01:40:56.288] Target folder D:\test2 seledted
+[31.01.2017 01:42:57.256] File D:\test2\2\21\DSCN3353.JPG been renamed to D:\test2\1\11\111\1111\111111.JPG
+[31.01.2017 01:48:06.523] Sorce folder D:\test1 seledted
+[31.01.2017 01:48:12.458] Target folder D:\test2 seledted
+[31.01.2017 01:48:18.533] Sorce folder D:\test1 seledted
+[31.01.2017 01:48:19.440] Target folder D:\test2 seledted
+[31.01.2017 01:52:16.550] File D:\test2\2\21\DSCN3354.JPG been renamed to D:\test2\1\11\111\1111\00000.JPG
+[31.01.2017 01:57:14.960] Sorce folder D:\test1 seledted
+[31.01.2017 01:57:23.538] Target folder D:\test2 seledted
+[31.01.2017 01:58:16.847] File D:\test2\2\21\DSCN3353.JPG been renamed to D:\test2\1\11\111\1111\aaa.JPG
+[31.01.2017 01:58:40.135] File D:\test2\1\11\111\1111\111111.JPG been renamed to D:\test2\1\11\111\1111\000.JPG
+[31.01.2017 02:01:11.656] Sorce folder D:\test1 seledted
+[31.01.2017 02:01:26.203] Target folder D:\test2 seledted
+[31.01.2017 02:02:46.666] File D:\test2\2\21\DSCN3353.JPG been renamed to D:\test2\1\11\111\1111\aaa.JPG
+[31.01.2017 02:10:04.746] Sorce folder D:\test1 seledted
+[31.01.2017 02:10:18.917] Target folder D:\test2 seledted
+[31.01.2017 02:10:31.709] File D:\test2\2\21\DSCN3354.JPG been renamed to D:\test2\1\11\111\1111\000.JPG
+[31.01.2017 02:12:00.445] File D:\test2\1\11\111\1111\111111.JPG been renamed to D:\test2\1\11\111\1111\aaa.JPG
+[31.01.2017 02:13:05.633] <<Synchronize started>>
+[31.01.2017 02:13:05.633] Parameters: FileVersion True, LastChange False, AddMissedFile False, Size False, Include subfolders True
+[31.01.2017 02:13:08.555] <<Synchronize finished>>
+[31.01.2017 02:13:13.655] <<Synchronize started>>
+[31.01.2017 02:13:13.655] Parameters: FileVersion True, LastChange False, AddMissedFile True, Size False, Include subfolders True
+[31.01.2017 02:13:13.751] File D:\test1\1\11\111\1111\211111.JPG been copied to D:\test2\1\11\111\1111\211111.JPG
+[31.01.2017 02:13:13.816] File D:\test1\1\DSCN0893me.JPG been copied to D:\test2\1\DSCN0893me.JPG
+[31.01.2017 02:13:13.879] File D:\test1\1\rrrrrr.JPG been copied to D:\test2\1\rrrrrr.JPG
+[31.01.2017 02:13:13.929] File D:\test1\DSCN0891.JPG been copied to D:\test2\DSCN0891.JPG
+[31.01.2017 02:13:13.967] File D:\test1\DSCN0893.JPG been copied to D:\test2\DSCN0893.JPG
+[31.01.2017 02:13:16.950] <<Synchronize finished>>
+[31.01.2017 02:13:28.726] <<Synchronize started>>
+[31.01.2017 02:13:28.726] Parameters: FileVersion True, LastChange True, AddMissedFile True, Size True, Include subfolders True
+[31.01.2017 02:13:28.848] File D:\test1\1\11\111\1111\aaa.JPG been copied to D:\test2\1\11\111\1111\aaa.JPG
+[31.01.2017 02:13:31.489] <<Synchronize finished>>

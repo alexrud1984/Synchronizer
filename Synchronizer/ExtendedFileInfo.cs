@@ -56,6 +56,7 @@ namespace Synchronizer
             IsExists = true;
             IsVersionHigh = false;
             IsLastChangeHigh = false;
+            IsSizeDiffer = false;
         }
     }
 }

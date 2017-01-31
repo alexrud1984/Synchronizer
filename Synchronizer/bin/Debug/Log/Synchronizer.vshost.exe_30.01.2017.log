@@ -1,0 +1,30 @@
+[30.01.2017 22:30:51.402] Sync model System.Threading.Thread intiated
+[30.01.2017 22:30:51.415] Filter * seledted
+[30.01.2017 22:31:01.224] Sorce folder D:\test1 seledted
+[30.01.2017 22:31:01.397] Filter * seledted
+[30.01.2017 22:32:08.202] Sorce folder D:\test2 seledted
+[30.01.2017 22:32:08.396] Filter * seledted
+[30.01.2017 22:32:43.181] Sorce folder C:\Users\Masha\Desktop seledted
+[30.01.2017 22:32:45.167] Filter * seledted
+[30.01.2017 22:33:46.417] Sorce folder C:\Users\Masha\Desktop\אםüמכ seledted
+[30.01.2017 22:34:56.570] Filter * seledted
+[30.01.2017 22:36:30.320] Sorce folder C:\Users\Masha\Desktop\101NIKON seledted
+[30.01.2017 22:36:30.659] Filter * seledted
+[30.01.2017 23:15:15.217] Sync model System.Threading.Thread intiated
+[30.01.2017 23:15:15.239] Filter * seledted
+[30.01.2017 23:15:15.240] FilterFileList
+[30.01.2017 23:15:15.240] FilterFileList
+[30.01.2017 23:15:25.243] CleanCompareData
+[30.01.2017 23:15:25.247] System.Collections.Generic.List`1[Synchronizer.ExtendedFileInfo] files list init
+[30.01.2017 23:15:25.740] FilterFileList
+[30.01.2017 23:15:25.741] Sorce folder D:\films seledted
+[30.01.2017 23:15:26.110] Filter * seledted
+[30.01.2017 23:15:26.110] FilterFileList
+[30.01.2017 23:15:26.110] FilterFileList
+[30.01.2017 23:16:37.739] CleanCompareData
+[30.01.2017 23:16:37.742] D:\ files list init
+[30.01.2017 23:16:37.888] FilterFileList
+[30.01.2017 23:16:37.888] Sorce folder D:\ seledted
+[30.01.2017 23:16:38.002] Filter * seledted
+[30.01.2017 23:16:38.003] FilterFileList
+[30.01.2017 23:16:38.003] FilterFileList
