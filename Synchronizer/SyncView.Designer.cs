@@ -123,6 +123,8 @@ namespace Synchronizer
             this.sourceListView.UseCompatibleStateImageBehavior = false;
             this.sourceListView.View = System.Windows.Forms.View.Details;
             this.sourceListView.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
+            this.sourceListView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.sourceListView_KeyDown);
+            this.sourceListView.KeyUp += new System.Windows.Forms.KeyEventHandler(this.sourceListView_KeyUp);
             // 
             // fileName
             // 
@@ -302,6 +304,9 @@ namespace Synchronizer
             this.targetListView.TabIndex = 6;
             this.targetListView.UseCompatibleStateImageBehavior = false;
             this.targetListView.View = System.Windows.Forms.View.Details;
+            this.targetListView.SelectedIndexChanged += new System.EventHandler(this.targetListView_SelectedIndexChanged);
+            this.targetListView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.targetListView_KeyDown);
+            this.targetListView.KeyUp += new System.Windows.Forms.KeyEventHandler(this.targetListView_KeyUp);
             // 
             // columnHeader1
             // 

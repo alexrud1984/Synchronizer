@@ -347,6 +347,7 @@ namespace Synchronizer
 
         private void listView1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            targetListView.TopItem = targetListView.Items[sourceListView.TopItem.Index];
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -691,6 +692,42 @@ namespace Synchronizer
                 this.ShowInTaskbar = false;
                 notifyIcon1.Visible = true;
             }
+        }
+
+        private void sourceListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
+        {
+            targetListView.TopItem = targetListView.Items[sourceListView.TopItem.Index];
+
+        }
+
+        private void sourceListView_KeyDown(object sender, KeyEventArgs e)
+        {
+            targetListView.TopItem = targetListView.Items[sourceListView.TopItem.Index];
+
+        }
+
+        private void sourceListView_KeyUp(object sender, KeyEventArgs e)
+        {
+            targetListView.TopItem = targetListView.Items[sourceListView.TopItem.Index];
+
+        }
+
+        private void targetListView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            sourceListView.TopItem = sourceListView.Items[targetListView.TopItem.Index];
+
+        }
+
+        private void targetListView_KeyDown(object sender, KeyEventArgs e)
+        {
+            sourceListView.TopItem = sourceListView.Items[targetListView.TopItem.Index];
+
+        }
+
+        private void targetListView_KeyUp(object sender, KeyEventArgs e)
+        {
+            sourceListView.TopItem = sourceListView.Items[targetListView.TopItem.Index];
+
         }
     }
 }
