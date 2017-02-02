@@ -31,7 +31,7 @@ namespace Synchronizer
 
         int TargetFilesCount { get; }
 
-        string TypeSelected { set; }
+        string TypeSelected { set; get; }
 
         List<ExtendedFileInfo> FilteredSourceFileList { get; }
 
@@ -49,11 +49,13 @@ namespace Synchronizer
 
         bool Size { set; get; }
 
-        bool IncludeSubfolders { set; }
+        bool IncludeSubfolders { set; get; }
 
         void CompareFolders();
 
         void SynchronizeFolders();
+
+        void ShowHistory();
 
         event FoldersFilteredEventHandler FoldersFiltered;
 

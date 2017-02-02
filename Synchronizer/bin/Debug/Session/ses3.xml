@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<Session xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <SessionTimestamp>2017-02-03T01:36:53.2920769+02:00</SessionTimestamp>
+  <SourceFolder>D:\test1</SourceFolder>
+  <TargetFolder>D:\test2</TargetFolder>
+  <FileTypeSelected>.JPG</FileTypeSelected>
+  <FileVersion>false</FileVersion>
+  <LastChange>true</LastChange>
+  <Autorename>true</Autorename>
+  <AddMissedFile>false</AddMissedFile>
+  <AutoSync>false</AutoSync>
+  <Size>false</Size>
+  <IncludeSubfolders>true</IncludeSubfolders>
+</Session>

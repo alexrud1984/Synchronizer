@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace Synchronizer
 {
+    [Serializable]
+
     public class Session
     {
-        static int count = 0;
+        public DateTime SessionTimestamp { set; get; }
 
-        public int SessionId { private set; get; }
+        public string SourceFolder { set; get; }
 
-        public string Source { set; get; }
-
-        public string Target { set; get; }
+        public string TargetFolder { set; get; }
 
         public string FileTypeSelected { set; get; }
 
@@ -22,20 +22,20 @@ namespace Synchronizer
 
         public bool LastChange { set; get; }
 
+        public bool Autorename { set; get; }
+
         public bool AddMissedFile { set; get; }
 
-        public bool AutoSynch { set; get; }
+        public bool AutoSync { set; get; }
+
+        public bool Size { set; get; }
 
         public bool IncludeSubfolders { set; get; }
 
-        public List<ExtendedFileInfo> SourceFiles { set; get; }
-
-        public List<ExtendedFileInfo> TargetFiles { set; get; }
 
         public Session()
         {
-            SessionId = count;
-            count++;
+            SessionTimestamp = DateTime.Now;
         }
 
     }

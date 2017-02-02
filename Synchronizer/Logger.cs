@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -30,6 +31,7 @@ namespace Synchronizer
             {
             }
         }
+
         public static void Write(string msg)
         {
             try
@@ -49,6 +51,30 @@ namespace Synchronizer
             catch
             {
             }
+        }
+
+        public static void OpenLastLogfile()
+        {
+            List<FileInfo> logFiles = new List<FileInfo>();
+            foreach (var item in Directory.GetFiles(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Log")))
+            {
+                logFiles.Add(new FileInfo(item));
+            }
+            int index=0;
+            try
+            {
+                for (int i = 0; i < logFiles.Count; i++)
+                {
+                    if (String.Equals(logFiles[i].Extension, ".log") && logFiles[i].LastAccessTime > logFiles[index].LastAccessTime)
+                    {
+                        index = i;
+                    }
+                }
+                Process.Start("notepad.exe", logFiles[index].FullName);
+            }
+            catch
+            { }
+
         }
     }
 }

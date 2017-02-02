@@ -17,9 +17,11 @@ namespace Synchronizer
     {
         ErrorProvider error;
         FolderBrowserDialog fbd = new FolderBrowserDialog();
+        SaveFileDialog sfd = new SaveFileDialog();
+        OpenFileDialog ofd = new OpenFileDialog();
+        
 
-
-        public string Source
+        public string SourceFolder
         {
             get
             {
@@ -32,7 +34,10 @@ namespace Synchronizer
             }
         }
 
-        public string Target
+        public string SessionPath { set; get; }
+        public string SessionName { set; get; }
+
+        public string TargetFolder
         {
             get
             {
@@ -118,8 +123,6 @@ namespace Synchronizer
                 subfoldersCheckBox.Checked = value;
             }
         }
-
-        public string OperateSessionId { set; get; }
 
         public List<ExtendedFileInfo> SourceFilesList
         {
@@ -282,7 +285,7 @@ namespace Synchronizer
             }
         }
 
-        public bool AutoRename
+        public bool Autorename
         {
             get
             {
@@ -319,7 +322,6 @@ namespace Synchronizer
         public event AutoSyncEventOnHandler AutoSyncFoldersOn;
         public event OpenSessionEventHandler OpenSession;
         public event SaveSessionEventHandler SaveSession;
-        public event DeleteSessionEventHandler DeleteSession;
         public event HistoryEventHandler ShowHistory;
         public event CompareEventHandler CompareFolders;
         public event AutoSyncEventOffHandler AutoSyncFoldersOff;
@@ -425,14 +427,6 @@ namespace Synchronizer
             if (SaveSession != null)
             {
                 SaveSession(this);
-            }
-        }
-
-        private void OnDeleteSession()
-        {
-            if (DeleteSession != null)
-            {
-                DeleteSession(this);
             }
         }
 
@@ -550,17 +544,26 @@ namespace Synchronizer
 
         private void openSessionToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
-            OnOpenSession();
+            ofd.InitialDirectory = SessionPath;
+            sfd.Filter = "Session files|*.xml";
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                SessionName = ofd.FileName;
+                OnOpenSession();
+            }
         }
 
         private void saveSessionToolStripMenuItem_Click_1(object sender, EventArgs e)
         {
-            OnSaveSession();
-        }
-
-        private void deleteSessionToolStripMenuItem_Click_1(object sender, EventArgs e)
-        {
-            OnDeleteSession();
+            SessionName = String.Empty;
+            sfd.InitialDirectory = SessionPath;
+            sfd.DefaultExt=".xml";
+            sfd.Filter = "Session files|*.xml";
+            if (sfd.ShowDialog() == DialogResult.OK)
+            {
+                SessionName = sfd.FileName;
+                OnSaveSession();
+            }
         }
 
         private void onToolStripMenuItem_Click_1(object sender, EventArgs e)
@@ -728,6 +731,11 @@ namespace Synchronizer
         {
             sourceListView.TopItem = sourceListView.Items[targetListView.TopItem.Index];
 
+        }
+
+        private void helpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Help will be added soon");
         }
     }
 }

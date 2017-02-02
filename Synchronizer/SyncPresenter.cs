@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace Synchronizer
 {
@@ -15,6 +16,8 @@ namespace Synchronizer
         private ISyncModel syncModel;
         List<ExtendedFileInfo> sourceListView;
         List<ExtendedFileInfo> targetListView;
+        XmlSerializer serializer;
+
         bool isRefreshing;
 
         public object Theread { get; private set; }
@@ -23,6 +26,7 @@ namespace Synchronizer
         {
             sourceListView = new List<ExtendedFileInfo>();
             targetListView = new List<ExtendedFileInfo>();
+            serializer = new XmlSerializer(typeof(Session));
             this.syncView = syncView;
             syncModel = new SyncModel();
             this.AttachView(syncView);
@@ -36,7 +40,6 @@ namespace Synchronizer
             syncView.AutoSyncFoldersOn += AutoSyncOn;
             syncView.AutoSyncFoldersOff += AutoSyncOff;
             syncView.CompareFolders += CompareFolders;
-            syncView.DeleteSession += DeleteSession;
             syncView.OpenSession += OpenSession;
             syncView.SaveSession += SaveSession;
             syncView.ShowHistory += ShowHistory;
@@ -58,10 +61,7 @@ namespace Synchronizer
         public void AutoSyncOn(ISynchView syncView)
         {
             syncView.Autosynch = "On";
-            syncModel.AddMissedFile = syncView.AddMissedFile;
-            syncModel.FileVersion = syncView.FileVersion;
-            syncModel.LastChange = syncView.LastChange;
-            syncModel.Size = syncView.Size;
+            ChangeBasParam(syncView);
             syncModel.AutoSync = true;
         }
 
@@ -74,17 +74,11 @@ namespace Synchronizer
             syncModel.CompareFolders();
         }
 
-        public void DeleteSession(ISynchView syncView)
-        {
-            syncView.Messanger("Delete Session");
-        }
-
         public void DetachView(ISynchView syncView)
         {
             syncView.AutoSyncFoldersOn -= AutoSyncOn;
             syncView.AutoSyncFoldersOff -= AutoSyncOff;
             syncView.CompareFolders -= CompareFolders;
-            syncView.DeleteSession -= DeleteSession;
             syncView.OpenSession -= OpenSession;
             syncView.SaveSession -= SaveSession;
             syncView.ShowHistory -= ShowHistory;
@@ -112,42 +106,102 @@ namespace Synchronizer
             syncView.FileVersion = true;
             syncView.LastChange = true;
             syncView.Size = true;
+            string pathSession = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Session");
+            if (!Directory.Exists(pathSession))
+                Directory.CreateDirectory(pathSession);
+            syncView.SessionPath = pathSession;
             syncView.FileTypes = syncModel.FileTypes;
         }
 
         public void OpenSession(ISynchView syncView)
         {
-            //throw new NotImplementedException();
+            Session openedSession;
+            using (FileStream fs = new FileStream(syncView.SessionName, FileMode.Open))
+            {
+                openedSession = (Session)serializer.Deserialize(fs);
+                ApplySession(openedSession, syncView);
+                syncView.Messanger("Session lodaded.");
+            }
+        }
+
+        private void ApplySession(Session openedSession, ISynchView syncView)
+        {
+            syncView.SourceFolder = openedSession.SourceFolder;
+            syncModel.SourceFolder = openedSession.SourceFolder;
+
+            syncView.TargetFolder = openedSession.TargetFolder;
+            syncModel.TargetFolder = openedSession.TargetFolder;
+
+            syncView.AddMissedFile = openedSession.AddMissedFile;
+            syncView.Size = openedSession.Size;
+            syncView.FileVersion = openedSession.FileVersion;
+            syncView.Autorename = openedSession.Autorename;
+            syncView.LastChange = openedSession.LastChange;
+
+            syncView.FileTypeSelected = openedSession.FileTypeSelected;
+
+            syncView.IncludeSubfolders = openedSession.IncludeSubfolders;
+
+            if (openedSession.AutoSync)
+            {
+                syncView.Autosynch = "On";
+            }
+            else
+            {
+                syncView.Autosynch = "Off";
+            }
+            syncModel.AutoSync = openedSession.AutoSync;
+
         }
 
         public void SaveSession(ISynchView syncView)
         {
-            //throw new NotImplementedException();
+            Session currentSession;
+            currentSession = GetSession();
+            using (FileStream fs = new FileStream(syncView.SessionName, FileMode.OpenOrCreate))
+            {
+                serializer.Serialize(fs, currentSession);
+                syncView.Messanger("Session is saved");
+            }
+
+        }
+
+        private Session GetSession()
+        {
+            Session session = new Session();
+            session.AddMissedFile = syncModel.AddMissedFile;
+            session.Autorename = syncModel.Autorename;
+            session.AutoSync = syncModel.AutoSync;
+            session.FileTypeSelected = syncModel.TypeSelected;
+            session.FileVersion = syncModel.FileVersion;
+            session.IncludeSubfolders = syncModel.IncludeSubfolders;
+            session.LastChange = syncModel.LastChange;
+            session.Size = syncModel.Size;
+            session.SourceFolder = syncModel.SourceFolder;
+            session.TargetFolder = syncModel.TargetFolder;
+
+            return session;
         }
 
         public void ShowHistory(ISynchView syncView)
         {
-          //  throw new NotImplementedException();
+            syncModel.ShowHistory();
         }
 
         public void SourcePathSelected(ISynchView syncView)
         {
-            syncModel.SourceFolder = syncView.Source;
+            syncModel.SourceFolder = syncView.SourceFolder;
         }
 
         public void TargetPathSelected(ISynchView syncView)
         {
-            syncModel.TargetFolder = syncView.Target;
+            syncModel.TargetFolder = syncView.TargetFolder;
         }
 
         public void SyncFolder(ISynchView syncView)
         {
             syncView.SyncButtonEnable = false;
-            syncModel.AddMissedFile = syncView.AddMissedFile;
-            syncModel.FileVersion = syncView.FileVersion;
-            syncModel.LastChange = syncView.LastChange;
-            syncModel.Size = syncView.Size;
-
+            ChangeBasParam(syncView);
             syncModel.SynchronizeFolders();
         }
 
@@ -274,9 +328,9 @@ namespace Synchronizer
         {
             syncView.Autosynch = "Off";
             syncModel.AutoSync = false;
-            string tempPath = syncView.Source;
-            syncView.Source = syncModel.SourceFolder = syncView.Target;
-            syncView.Target = syncModel.TargetFolder = tempPath;
+            string tempPath = syncView.SourceFolder;
+            syncView.SourceFolder = syncModel.SourceFolder = syncView.TargetFolder;
+            syncView.TargetFolder = syncModel.TargetFolder = tempPath;
             while (isRefreshing)
             {
                 Thread.Sleep(2000);
@@ -290,7 +344,7 @@ namespace Synchronizer
         private void ChangeBasParam(ISynchView syncView)
         {
             syncModel.AddMissedFile = syncView.AddMissedFile;
-            syncModel.Autorename = syncView.AutoRename;
+            syncModel.Autorename = syncView.Autorename;
             syncModel.FileVersion = syncView.FileVersion;
             syncModel.LastChange = syncView.LastChange;
             syncModel.Size = syncView.Size;

@@ -24,8 +24,6 @@ namespace Synchronizer
 
         void OpenSession(ISynchView syncView);
 
-        void DeleteSession(ISynchView syncView);
-
         void SyncFolder(ISynchView syncView);
 
         void AutoSyncOn(ISynchView syncView);

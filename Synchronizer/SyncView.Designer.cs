@@ -72,7 +72,6 @@ namespace Synchronizer
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openSessionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveSessionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.deleteSessionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autosynchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.onToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.offToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -473,8 +472,7 @@ namespace Synchronizer
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openSessionToolStripMenuItem,
-            this.saveSessionToolStripMenuItem,
-            this.deleteSessionToolStripMenuItem});
+            this.saveSessionToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "File";
@@ -482,23 +480,16 @@ namespace Synchronizer
             // openSessionToolStripMenuItem
             // 
             this.openSessionToolStripMenuItem.Name = "openSessionToolStripMenuItem";
-            this.openSessionToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.openSessionToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.openSessionToolStripMenuItem.Text = "Open session";
             this.openSessionToolStripMenuItem.Click += new System.EventHandler(this.openSessionToolStripMenuItem_Click_1);
             // 
             // saveSessionToolStripMenuItem
             // 
             this.saveSessionToolStripMenuItem.Name = "saveSessionToolStripMenuItem";
-            this.saveSessionToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.saveSessionToolStripMenuItem.Size = new System.Drawing.Size(144, 22);
             this.saveSessionToolStripMenuItem.Text = "Save session";
             this.saveSessionToolStripMenuItem.Click += new System.EventHandler(this.saveSessionToolStripMenuItem_Click_1);
-            // 
-            // deleteSessionToolStripMenuItem
-            // 
-            this.deleteSessionToolStripMenuItem.Name = "deleteSessionToolStripMenuItem";
-            this.deleteSessionToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
-            this.deleteSessionToolStripMenuItem.Text = "Delete session";
-            this.deleteSessionToolStripMenuItem.Click += new System.EventHandler(this.deleteSessionToolStripMenuItem_Click_1);
             // 
             // autosynchToolStripMenuItem
             // 
@@ -535,6 +526,7 @@ namespace Synchronizer
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "Help";
+            this.helpToolStripMenuItem.Click += new System.EventHandler(this.helpToolStripMenuItem_Click);
             // 
             // flowLayoutPanel2
             // 
@@ -746,7 +738,6 @@ namespace Synchronizer
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openSessionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveSessionToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem deleteSessionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem autosynchToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem onToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem offToolStripMenuItem;

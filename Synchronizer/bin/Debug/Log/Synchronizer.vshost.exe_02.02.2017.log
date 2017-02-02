@@ -31,3 +31,41 @@
 [02.02.2017 01:06:20.658] Target folder D:\test2 seledted
 [02.02.2017 01:08:24.414] Sorce folder D:\test1 seledted
 [02.02.2017 01:08:44.761] Target folder D:\test2 seledted
+[02.02.2017 21:38:47.877] Sorce folder D:\test1 seledted
+[02.02.2017 21:38:55.257] Target folder D:\test2 seledted
+[02.02.2017 22:22:53.240] Synchronizer started
+[02.02.2017 22:23:02.414] Sorce folder C:\ seledted
+[02.02.2017 22:28:05.208] Synchronizer started
+[02.02.2017 22:34:31.981] Synchronizer started
+[02.02.2017 23:11:33.742] Synchronizer started
+[02.02.2017 23:11:54.294] Synchronizer started
+[02.02.2017 23:13:24.951] [System.IO.__Error.WinIOError()] Отказано в доступе по пути "D:\$RECYCLE.BIN\S-1-5-18".
+[02.02.2017 23:14:28.683] Synchronizer started
+[02.02.2017 23:14:37.748] [System.IO.__Error.WinIOError()] Отказано в доступе по пути "D:\$RECYCLE.BIN\S-1-5-18".
+[02.02.2017 23:14:37.763] [System.IO.__Error.WinIOError()] Отказано в доступе по пути "D:\$RECYCLE.BIN\S-1-5-18".
+[02.02.2017 23:17:34.387] Synchronizer started
+[02.02.2017 23:17:43.301] Sorce folder D:\ seledted
+[02.02.2017 23:17:51.287] Synchronizer started
+[02.02.2017 23:20:06.592] Synchronizer started
+[02.02.2017 23:20:34.021] [System.IO.__Error.WinIOError()] Отказано в доступе по пути "D:\$RECYCLE.BIN\S-1-5-18".
+[02.02.2017 23:20:34.034] [System.IO.__Error.WinIOError()] Отказано в доступе по пути "D:\$RECYCLE.BIN\S-1-5-18".
+[02.02.2017 23:23:58.624] Synchronizer started
+[02.02.2017 23:24:18.554] [System.IO.__Error.WinIOError()] Отказано в доступе по пути "D:\$RECYCLE.BIN\S-1-5-18".
+[02.02.2017 23:24:18.569] [System.IO.__Error.WinIOError()] Отказано в доступе по пути "D:\$RECYCLE.BIN\S-1-5-18".
+[02.02.2017 23:25:46.652] Synchronizer started
+[02.02.2017 23:26:36.296] [System.IO.__Error.WinIOError()] Отказано в доступе по пути "D:\$RECYCLE.BIN\S-1-5-18".
+[02.02.2017 23:26:46.297] [System.IO.__Error.WinIOError()] Отказано в доступе по пути "D:\$RECYCLE.BIN\S-1-5-18".
+[02.02.2017 23:27:48.707] Synchronizer started
+[02.02.2017 23:28:06.387] Sorce folder D:\test1 seledted
+[02.02.2017 23:28:17.352] Target folder D:\test2 seledted
+[02.02.2017 23:29:16.002] Synchronizer started
+[02.02.2017 23:29:29.604] Sorce folder D:\test1 seledted
+[02.02.2017 23:29:37.847] Target folder D:\test2 seledted
+[02.02.2017 23:31:38.531] Synchronizer started
+[02.02.2017 23:31:54.287] Sorce folder D:\test1 seledted
+[02.02.2017 23:32:03.099] Target folder D:\test2 seledted
+[02.02.2017 23:36:53.227] Synchronizer started
+[02.02.2017 23:37:07.848] Sorce folder D:\test1 seledted
+[02.02.2017 23:37:14.486] Target folder D:\test2 seledted
+[02.02.2017 23:39:09.286] Synchronizer started
+[02.02.2017 23:52:28.239] Synchronizer started

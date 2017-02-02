@@ -18,8 +18,6 @@ namespace Synchronizer
 
     public delegate void OpenSessionEventHandler(ISynchView sender);
 
-    public delegate void DeleteSessionEventHandler(ISynchView sender);
-
     public delegate void HistoryEventHandler(ISynchView sender);
 
     public delegate void CompareEventHandler(ISynchView sender);
@@ -47,9 +45,9 @@ namespace Synchronizer
 
         bool IsViewUpdating { get; }
 
-        string Source { set; get; }
+        string SourceFolder { set; get; }
 
-        string Target { set; get; }
+        string TargetFolder { set; get; }
 
         string[] FileTypes { set; }
 
@@ -69,9 +67,11 @@ namespace Synchronizer
 
         bool Size { set; get; }
 
-        bool AutoRename { set; get; }
+        bool Autorename { set; get; }
 
-        string OperateSessionId { set; get; }
+        string SessionPath { set; get; }
+
+        string SessionName { set; get; }
 
         List<ExtendedFileInfo> SourceFilesList { set; }
 
@@ -96,8 +96,6 @@ namespace Synchronizer
         event OpenSessionEventHandler OpenSession;
 
         event SaveSessionEventHandler SaveSession;
-
-        event DeleteSessionEventHandler DeleteSession;
 
         event HistoryEventHandler ShowHistory;
 
